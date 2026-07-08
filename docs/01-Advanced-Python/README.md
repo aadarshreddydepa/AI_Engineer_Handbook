@@ -17,6 +17,30 @@ This module covers **Advanced Python**. Production-grade Python: typing, async, 
 - Async, concurrency, and parallelism for AI workloads
 - Packaging, dependency management, and profiling
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md).
+
+| # | Lesson |
+|---|---|
+| 01.1 | [How Python Runs Your Code](weeks/01.1-python-architecture.md) |
+| 01.2 | [Memory, Objects & the Data Model](weeks/01.2-memory-management.md) |
+| 01.3 | [Object-Oriented Python](weeks/01.3-object-oriented-python.md) |
+| 01.4 | [Functional Python](weeks/01.4-functional-python.md) |
+| 01.5 | [Iterators & Generators](weeks/01.5-iterators-generators.md) |
+| 01.6 | [Decorators](weeks/01.6-decorators.md) |
+| 01.7 | [Context Managers](weeks/01.7-context-managers.md) |
+| 01.8 | [Type Hinting](weeks/01.8-type-hinting.md) |
+| 01.9 | [Error Handling & Logging](weeks/01.9-error-handling-logging.md) |
+| 01.10 | [Testing](weeks/01.10-testing.md) |
+| 01.11 | [Performance Optimization](weeks/01.11-performance.md) |
+| 01.12 | [Async Programming](weeks/01.12-async.md) |
+| 01.13 | [Packaging & Code Quality](weeks/01.13-packaging-code-quality.md) |
+| 01.14 | [Reading Open-Source Code](weeks/01.14-reading-open-source.md) |
+| 01.15 | [Mini Projects & Summary](weeks/01.15-projects-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/advanced-python-cheatsheet.md)
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:

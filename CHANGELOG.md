@@ -9,8 +9,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 01 · Advanced Python — lesson content
+- Module 02 · Computer Science — lesson content
 - Weekly lessons authored module by module
+
+---
+
+## [0.6.0] — 2026-07-08
+
+### Added
+- **Module 01 · Advanced Python for AI Engineering — complete.**
+  - 15 lessons (`docs/01-Advanced-Python/weeks/01.1`–`01.15`): Python architecture/bytecode/import system, memory & the data model, OOP, functional programming, iterators & generators, decorators, context managers, type hinting (+ Pydantic), error handling & logging, testing, performance & the GIL, async programming, packaging & code quality, reading open-source code, and a projects+summary consolidation lesson.
+  - Companion artifacts: consolidated [exercises](docs/01-Advanced-Python/exercises/README.md) (coding/debug/refactor/design, difficulty-ramped), a 25-question [quiz](docs/01-Advanced-Python/quizzes/quiz-01.md) with model [answers](docs/01-Advanced-Python/quizzes/answers-01.md), a full [flashcard deck](docs/01-Advanced-Python/flashcards/deck.md), and a [master cheat sheet](docs/01-Advanced-Python/cheat-sheets/advanced-python-cheatsheet.md).
+  - Six progressively harder mini-projects (file indexer → log analyzer → async API client → CLI → config manager → plugin system), with the async API client as the flagship.
+  - Module [lesson index](docs/01-Advanced-Python/weeks/README.md); linked from the module README.
+- Glossary: added an "Advanced Python (Module 01)" section (CPython, bytecode, PVM, GIL, closures, decorators, generators, context managers, Protocol, Pydantic, coroutine/event loop, vectorization, lockfile, and more).
+
+### Notes
+- Lessons assume Python fundamentals (no beginner reteaching) and target production AI-engineering depth; §9 (Error Handling) and §10 (Logging) from the module spec are combined into lesson 01.9.
 
 ---
 

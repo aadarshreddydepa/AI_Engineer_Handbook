@@ -120,3 +120,32 @@
 | **Spaced repetition** | Reviewing material at expanding intervals to counteract forgetting. |
 | **Interleaving** | Mixing multiple topics during review to strengthen retrieval and discrimination. |
 | **Diátaxis** | A documentation framework distinguishing tutorials, how-to guides, reference, and explanation. |
+
+## Advanced Python (Module 01)
+
+| Term | Definition |
+|---|---|
+| **CPython** | The reference C implementation of Python that virtually everyone (and every AI framework) uses. |
+| **Bytecode** | Compact, stack-machine instructions Python compiles source into, executed by the PVM. |
+| **PVM (Python Virtual Machine)** | The bytecode-interpreting evaluation loop inside CPython. |
+| **GIL (Global Interpreter Lock)** | CPython's lock allowing only one thread to run Python bytecode at a time. |
+| **Reference counting** | CPython's primary memory management: an object is freed when its reference count hits zero. |
+| **Garbage collection (cyclic)** | The generational collector that reclaims unreachable reference cycles refcounting can't. |
+| **Aliasing** | Two or more names bound to the same object, so changes via one are visible via the others. |
+| **Closure** | A function that captures (by reference) variables from its enclosing scope. |
+| **Higher-order function** | A function that takes and/or returns other functions. |
+| **Decorator** | A callable that takes a function/class and returns an enhanced one (`@dec` == `f = dec(f)`). |
+| **Iterator / iterable** | An iterable has `__iter__`; an iterator (from `iter()`) has `__next__` and raises `StopIteration`. |
+| **Generator** | A pausable function using `yield` that produces values lazily, one at a time. |
+| **Lazy evaluation** | Computing values only when needed, enabling constant-memory processing of large data. |
+| **Context manager** | An object with `__enter__`/`__exit__` used with `with` to guarantee setup/cleanup. |
+| **Type hint** | An optional annotation of expected types, checked statically (e.g. by mypy), ignored at runtime. |
+| **Protocol** | A structural (duck-typed) interface: any object with the right methods conforms, without inheritance. |
+| **Pydantic** | A library that uses type annotations to validate and parse data at runtime (e.g. LLM output). |
+| **Coroutine** | An `async def` function that can suspend at `await`, scheduled by the asyncio event loop. |
+| **Event loop** | The asyncio scheduler that runs, suspends, and resumes coroutines cooperatively. |
+| **Memoization** | Caching a pure function's results by input (e.g. `functools.lru_cache`). |
+| **Vectorization** | Expressing numeric loops as array operations executed in optimized C (e.g. NumPy). |
+| **Editable install** | Installing a package (`pip install -e .`) so it's importable and reflects live edits. |
+| **Lockfile** | A file pinning exact versions of all dependencies for reproducible installs. |
+| **Pre-commit hook** | A Git hook running quality checks (lint/format/type) automatically before each commit. |
