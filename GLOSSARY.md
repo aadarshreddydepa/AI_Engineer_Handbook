@@ -96,3 +96,27 @@
 | **LLM-as-judge** | Using an LLM to evaluate outputs of another model. |
 | **Prompt injection** | An attack that manipulates a model via crafted input to override instructions. |
 | **Guardrails** | Controls that constrain model inputs/outputs for safety and reliability. |
+
+## Foundations, Engineering & Learning (Module 00)
+
+| Term | Definition |
+|---|---|
+| **AI Engineering** | The discipline of designing, building, deploying, scaling, and maintaining production systems built around AI/foundation models. |
+| **AGI (Artificial General Intelligence)** | Hypothetical human-level, general-purpose intelligence across all domains; a research goal, not a shippable product. |
+| **Generative AI** | Deep learning that produces new content (text, images, audio, video, code) rather than only classifying or predicting. |
+| **Narrow AI** | AI competent at a specific task or domain (all AI that exists today), as opposed to AGI. |
+| **Virtual environment** | An isolated, per-project Python interpreter plus that project's packages, preventing cross-project conflicts. |
+| **Reproducibility** | The ability to rebuild an identical environment or result on any machine from declared files (e.g. `pyproject.toml` + lockfile). |
+| **Package manager** | A tool (e.g. `uv`, `poetry`) that resolves, locks, and declares project dependencies. |
+| **Lockfile** | A file pinning the exact versions of all (including transitive) dependencies for reproducible installs. |
+| **Formatter** | A tool that standardizes how code looks (e.g. `ruff format`). |
+| **Linter** | A tool that flags likely bugs and bad patterns (e.g. `ruff check`). |
+| **Semantic Versioning (SemVer)** | A `MAJOR.MINOR.PATCH` versioning scheme: breaking / backward-compatible feature / backward-compatible fix. |
+| **Conventional Commits** | A commit-message convention of the form `type(scope): summary` (e.g. `feat`, `fix`, `docs`). |
+| **Changelog** | A human-readable, versioned list of notable project changes (Added/Changed/Fixed/Removed). |
+| **Branch** | An isolated line of work in Git, keeping risky changes off the always-working main branch. |
+| **Three-pass method** | Reading a research paper in three increasingly deep passes (gist → idea → reimplement). |
+| **Active recall** | Learning by retrieving information from memory rather than rereading. |
+| **Spaced repetition** | Reviewing material at expanding intervals to counteract forgetting. |
+| **Interleaving** | Mixing multiple topics during review to strengthen retrieval and discrimination. |
+| **Diátaxis** | A documentation framework distinguishing tutorials, how-to guides, reference, and explanation. |

@@ -9,8 +9,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 00 · Orientation — lesson content
+- Module 01 · Advanced Python — lesson content
 - Weekly lessons authored module by module
+
+---
+
+## [0.5.0] — 2026-07-08
+
+### Added
+- **Module 00 · Orientation & Foundations — complete.** First authored module of the handbook.
+  - 12 lessons (`docs/00-Orientation/weeks/00.1`–`00.12`): vocabulary of the field, the AI Engineering landscape, careers & roles, learning strategy, development environment, GitHub workflow, reading documentation, reading research papers, the daily learning workflow, the AI Engineer mindset, recommended resources, and a consolidation/summary lesson.
+  - Companion artifacts: consolidated [exercises](docs/00-Orientation/exercises/README.md), a 20-question [quiz](docs/00-Orientation/quizzes/quiz-01.md) with model [answers](docs/00-Orientation/quizzes/answers-01.md), a full [flashcard deck](docs/00-Orientation/flashcards/deck.md), and a [master cheat sheet](docs/00-Orientation/cheat-sheets/orientation-cheatsheet.md).
+  - Module [lesson index](docs/00-Orientation/weeks/README.md); linked from the module README.
+- Glossary: added a "Foundations, Engineering & Learning (Module 00)" section (AI Engineering, AGI, reproducibility, SemVer, Conventional Commits, active recall, spaced repetition, and more).
+
+### Notes
+- Lessons follow the standards library and the 26-section master template, adapted for conceptual/orientation content (template sections not applicable to non-technical material — e.g. Security/Performance Considerations — are intentionally omitted with a note).
 
 ---
 

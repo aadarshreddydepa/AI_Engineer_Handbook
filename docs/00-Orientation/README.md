@@ -17,6 +17,27 @@ This module covers **Orientation**. How to use this handbook, the AI-engineer mi
 - Setting up a reproducible Python + GPU environment
 - The experiment and reproducibility mindset
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md).
+
+| # | Lesson |
+|---|---|
+| 00.1 | [Introduction: The Vocabulary of the Field](weeks/00.1-introduction.md) |
+| 00.2 | [The AI Engineering Landscape](weeks/00.2-ai-engineering-landscape.md) |
+| 00.3 | [Career Roadmap & Roles](weeks/00.3-career-roadmap.md) |
+| 00.4 | [Learning Strategy](weeks/00.4-learning-strategy.md) |
+| 00.5 | [The Development Environment](weeks/00.5-development-environment.md) |
+| 00.6 | [GitHub Repository Workflow](weeks/00.6-github-repository-workflow.md) |
+| 00.7 | [Reading Technical Documentation](weeks/00.7-reading-technical-documentation.md) |
+| 00.8 | [Reading Research Papers](weeks/00.8-reading-research-papers.md) |
+| 00.9 | [The Daily Learning Workflow](weeks/00.9-learning-workflow.md) |
+| 00.10 | [The AI Engineer Mindset](weeks/00.10-ai-engineer-mindset.md) |
+| 00.11 | [Recommended Resources](weeks/00.11-recommended-resources.md) |
+| 00.12 | [Summary, Cheat Sheet & Review](weeks/00.12-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/orientation-cheatsheet.md)
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:
