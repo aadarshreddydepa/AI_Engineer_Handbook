@@ -17,6 +17,28 @@ This module covers **Computer Science**. The core CS every engineer needs: data 
 - Algorithmic patterns and problem solving
 - Memory, recursion, and computational thinking
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md).
+
+| # | Lesson |
+|---|---|
+| 02.1 | [How Computers Actually Work](weeks/02.1-how-computers-work.md) |
+| 02.2 | [Memory](weeks/02.2-memory.md) |
+| 02.3 | [Data Structures](weeks/02.3-data-structures.md) |
+| 02.4 | [Algorithms](weeks/02.4-algorithms.md) |
+| 02.5 | [Time & Space Complexity](weeks/02.5-complexity.md) |
+| 02.6 | [Operating Systems](weeks/02.6-operating-systems.md) |
+| 02.7 | [Networking](weeks/02.7-networking.md) |
+| 02.8 | [Concurrency](weeks/02.8-concurrency.md) |
+| 02.9 | [Serialization](weeks/02.9-serialization.md) |
+| 02.10 | [File Systems](weeks/02.10-file-systems.md) |
+| 02.11 | [System Design Basics](weeks/02.11-system-design-basics.md) |
+| 02.12 | [Debugging](weeks/02.12-debugging.md) |
+| 02.13 | [Mini Projects & Summary](weeks/02.13-projects-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/cs-foundations-cheatsheet.md)
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:

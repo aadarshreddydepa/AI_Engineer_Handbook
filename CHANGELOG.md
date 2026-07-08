@@ -9,8 +9,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 02 · Computer Science — lesson content
+- Module 03 · Linux — lesson content
 - Weekly lessons authored module by module
+
+---
+
+## [0.7.0] — 2026-07-08
+
+### Added
+- **Module 02 · Computer Science Foundations for AI Engineers — complete.**
+  - 13 lessons (`docs/02-Computer-Science/weeks/02.1`–`02.13`): how computers work (CPU/cache/instruction cycle/compilers), memory (stack/heap/fragmentation/GC/cache locality), data structures (arrays→graphs), algorithms (search/sort/DP/greedy/graph/backtracking), time & space complexity (Big-O/Ω/Θ), operating systems (processes/threads/scheduling/virtual memory), networking (TCP/IP, HTTP(S), REST/WebSocket/gRPC, load balancers), concurrency (threading/multiprocessing/async, the GIL, races/locks), serialization (JSON/YAML/Pickle/MessagePack/Protobuf + security), file systems (permissions/symlinks/compression/durable writes), system-design basics (scaling/availability/fault tolerance/caching), debugging (stack traces/profiling/observability), and a projects+summary consolidation lesson.
+  - Companion artifacts: consolidated [exercises](docs/02-Computer-Science/exercises/README.md) (conceptual/coding/debug/architecture, difficulty-ramped), a 26-question [quiz](docs/02-Computer-Science/quizzes/quiz-01.md) with model [answers](docs/02-Computer-Science/quizzes/answers-01.md), a full [flashcard deck](docs/02-Computer-Science/flashcards/deck.md), and a [master cheat sheet](docs/02-Computer-Science/cheat-sheets/cs-foundations-cheatsheet.md).
+  - Seven mini-projects threaded through their host lessons: trie autocomplete, graph traversal visualizer, thread-safe queue, LRU cache, in-memory cache, URL shortener (core), and a simple HTTP server.
+  - Module [lesson index](docs/02-Computer-Science/weeks/README.md); linked from the module README.
+- Glossary: added a "Computer Science Foundations (Module 02)" section (memory hierarchy, cache locality, Big-O, process/thread, deadlock, virtual memory, TCP/HTTP, load balancer, serialization, statelessness, observability, and more).
+
+### Notes
+- Taught from first principles (no prior CS assumed) but at professional depth, with every concept tied to AI-system relevance (GPUs, tensors, model serving, distributed training) and cross-referenced to Modules 00–01.
 
 ---
 

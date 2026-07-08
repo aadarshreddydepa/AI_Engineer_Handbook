@@ -149,3 +149,38 @@
 | **Editable install** | Installing a package (`pip install -e .`) so it's importable and reflects live edits. |
 | **Lockfile** | A file pinning exact versions of all dependencies for reproducible installs. |
 | **Pre-commit hook** | A Git hook running quality checks (lint/format/type) automatically before each commit. |
+
+## Computer Science Foundations (Module 02)
+
+| Term | Definition |
+|---|---|
+| **Memory hierarchy** | The tiered speed/size layers: registers → L1/L2/L3 cache → RAM → SSD → HDD/network. |
+| **Cache line** | The fixed chunk (~64 bytes) memory is moved in; the reason contiguous access is fast. |
+| **Cache locality** | Fast access from reusing recently/nearby data that stays in cache. |
+| **Stack (memory)** | The region holding call frames and locals; fast, automatic, LIFO, size-limited. |
+| **Heap (memory)** | The region for dynamically allocated objects; larger, GC/manually managed. |
+| **Fragmentation** | Free memory scattered in non-contiguous gaps so large allocations fail (e.g., CUDA OOM). |
+| **Hash table** | A structure mapping keys to values via a hash function; O(1) average lookup. |
+| **Heap (data structure)** | A tree giving O(1) access to the min/max and O(log n) insert/pop; used for top-k. |
+| **Trie** | A prefix tree storing strings by shared prefixes; O(k) lookup by key length. |
+| **Graph** | Vertices connected by edges; models relationships (computation graphs, HNSW, agents). |
+| **Big-O / Big-Omega / Big-Theta** | Upper / lower / tight bounds on how an algorithm's cost grows with input size. |
+| **Process** | A running program with its own isolated memory space. |
+| **Thread** | A unit of execution within a process, sharing the process's memory. |
+| **Context switch** | Saving one thread/process's state and loading another's; disrupts the CPU cache. |
+| **Race condition** | A bug whose outcome depends on unpredictable thread timing on shared state. |
+| **Deadlock** | Threads waiting forever for each other's resources (circular wait). |
+| **Virtual memory** | Per-process private address space mapped to physical RAM/disk via paging. |
+| **Page cache** | RAM caching of recently-read file data, making repeat reads fast. |
+| **TCP / UDP** | Reliable ordered / fast best-effort transport protocols. |
+| **DNS** | The system translating domain names to IP addresses. |
+| **HTTP / HTTPS** | The request/response web protocol / its TLS-encrypted form. |
+| **REST / gRPC / WebSocket** | Request-response APIs / HTTP-2+Protobuf RPC / persistent bidirectional connections. |
+| **Load balancer** | Distributes requests across multiple server instances for scale and availability. |
+| **Reverse proxy** | A server fronting backends for TLS, routing, auth, and rate limiting. |
+| **Serialization / deserialization** | Converting objects to bytes for storage/transport, and back. |
+| **Horizontal / vertical scaling** | Adding more machines / making one machine bigger. |
+| **Statelessness** | Keeping no per-client state so any instance can serve any request (enables scaling). |
+| **Fault tolerance** | A system's ability to keep working when components fail. |
+| **Stack trace (traceback)** | The chain of function calls at the moment of an error. |
+| **Observability** | Understanding a system's behavior via logs, metrics, and traces. |
