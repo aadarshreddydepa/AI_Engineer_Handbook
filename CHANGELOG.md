@@ -9,8 +9,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 00 · Foundations & Engineering Setup — lesson content
-- Lesson, exercise, project, and template scaffolds
+- Module 00 · Orientation — lesson content
+- Weekly lessons authored module by module
+
+---
+
+## [0.4.0] — 2026-07-08
+
+### Changed
+- **Adopted Curriculum Review Option A — expanded to 22 modules.** Inserted `12-Prompt-Engineering` (after LLMs) and `15-Fine-Tuning` (after AI-Agents); renumbered former modules `12–19` → `13–21`.
+- Regenerated all `docs/` module folders, READMEs, and navigation from the updated [scripts/generate_structure.py](scripts/generate_structure.py) (single source of truth).
+- Realigned `README.md`, `ROADMAP.md` (now ~57 weeks, updated dependency graph & phases), `CURRICULUM.md`, and `PROGRESS_TRACKER.md` to the 22-module taxonomy.
+- Marked the structural decision as applied in [CURRICULUM_REVIEW.md](CURRICULUM_REVIEW.md).
+
+---
+
+## [0.3.0] — 2026-07-08
+
+### Added
+- **Standards library** in [standards/](standards/): documentation philosophy, visual, code, retention, exercise, project, interview, and reference standards, plus an index.
+- **Master lesson template** — canonical 26-section structure in [templates/lesson-template.md](templates/lesson-template.md).
+- **Curriculum validation** in [CURRICULUM_REVIEW.md](CURRICULUM_REVIEW.md): gap analysis (fine-tuning, prompt engineering, data engineering, evaluation), ordering check, and a structural decision proposal.
+
+### Changed
+- Upgraded [templates/project-template.md](templates/project-template.md) to the required 9-section project standard.
+- Linked the standards library from [CONTRIBUTING.md](CONTRIBUTING.md) and [README.md](README.md); aligned naming conventions to the `NN-Title-Case` scheme.
+
+---
+
+## [0.2.0] — 2026-07-08
+
+### Changed
+- **Expanded to a 20-module taxonomy** (`00-Orientation` … `19-Capstone-Projects`), superseding the earlier 16-module ML-only structure. Added Computer Science, Linux, Git, SQL, Data Analysis, Cloud, System Design, and Interview Preparation as first-class modules.
+- Restructured `docs/` so each module is a top-level folder (removed the `docs/modules/` nesting).
+- Realigned `README.md`, `ROADMAP.md`, `CURRICULUM.md`, `REPOSITORY_STRUCTURE.md`, and `PROGRESS_TRACKER.md` to the new taxonomy.
+
+### Added
+- Full repository skeleton: every module folder with eight standardized subfolders (`weeks/`, `diagrams/`, `exercises/`, `projects/`, `quizzes/`, `flashcards/`, `cheat-sheets/`, `references/`).
+- Navigation-rich `README.md` for every module and top-level folder (parent / prev / next / roadmap / related).
+- New top-level folders: `code/`, `notebooks/`, `interview-preparation/`, `scripts/`, `archive/`, and `assets/{icons,cheatsheets}`.
+- Twelve reusable templates (lesson, weekly summary, project, exercise, quiz, flashcards, architecture notes, research-paper summary, cheat sheet, interview notes, debugging session, project retrospective).
+- `LICENSE.md` (CC BY 4.0 content + MIT code) and `.gitignore`.
+- `scripts/generate_structure.py` — idempotent generator that owns the structural/templated files.
+
+### Removed
+- Superseded top-level `cheatsheets/`, `interview-prep/`, and `glossary/` folders (replaced by `assets/cheatsheets/`, `interview-preparation/`, and per-module `references/`).
 
 ---
 

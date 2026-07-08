@@ -2,6 +2,20 @@
 
 > This handbook should read like a **single-author published book**, even as it grows. This guide keeps every page consistent, professional, and maintainable.
 
+> [!IMPORTANT]
+> This is the **quick** style guide. The detailed rulebook lives in [standards/](standards/) — read the relevant standard before authoring, and build every lesson from [templates/lesson-template.md](templates/lesson-template.md) (the canonical 26-section structure).
+
+| Standard | Governs |
+|---|---|
+| [documentation-philosophy](standards/documentation-philosophy.md) | Voice, structure, formatting |
+| [visual-standards](standards/visual-standards.md) | Diagrams & images |
+| [code-standards](standards/code-standards.md) | Code examples |
+| [retention-standards](standards/retention-standards.md) | Summaries, cheat sheets, flashcards |
+| [exercise-standards](standards/exercise-standards.md) | Exercises |
+| [project-standards](standards/project-standards.md) | Projects |
+| [interview-standards](standards/interview-standards.md) | Interview sections |
+| [reference-standards](standards/reference-standards.md) | Citations |
+
 ---
 
 ## Golden rules
@@ -73,11 +87,12 @@ Every lesson MUST follow the section order defined in [CURRICULUM.md](CURRICULUM
 
 | Item | Convention | Example |
 |---|---|---|
-| Module folder | `NN-slug` | `05-nlp-transformer` |
-| Lesson file | `NN.M-slug.md` | `05.4-attention.md` |
-| Image | `topic-descriptor.png` | `attention-heads.png` |
-| Exercise set | `exercises/NN-slug/` | `exercises/05-nlp-transformer/` |
-| Flashcard deck | `flashcards/NN-slug.md` | `flashcards/05-nlp-transformer.md` |
+| Module folder | `NN-Title-Case` | `10-NLP` |
+| Weekly lesson | `weeks/week-NN.md` | `docs/10-NLP/weeks/week-03.md` |
+| Image | `topic-descriptor.png` | `assets/images/attention-heads.png` |
+| Exercise | `exercises/exercise-NN.md` | `docs/10-NLP/exercises/exercise-01.md` |
+| Flashcard deck | `flashcards/deck.md` | `docs/10-NLP/flashcards/deck.md` |
+| Template | `type-template.md` | `templates/lesson-template.md` |
 
 See [REPOSITORY_STRUCTURE.md](REPOSITORY_STRUCTURE.md) for the full map.
 

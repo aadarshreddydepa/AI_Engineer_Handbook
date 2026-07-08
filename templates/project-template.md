@@ -1,37 +1,80 @@
+<!-- Follows ../standards/project-standards.md — keep all 9 sections. -->
+
 # Project · <Title>
+
+[🏠 Module](../README.md) · [🗺 Roadmap](../../../ROADMAP.md)
 
 | | |
 |---|---|
-| **Module** | <NN · Module name> |
-| **Est. time** | 🛠️ <hours> |
+| **Module** | `<NN · Name>` |
+| **Est. time** | 🛠️ `<hours>` |
 | **Difficulty** | ⭐–⭐⭐⭐⭐⭐ |
 
-## What you'll build
-<One paragraph describing the deliverable and why it's realistic.>
+## 1. Goal
+`<One paragraph: what you'll build and why it's realistic.>`
 
-## Skills exercised
-- <skill>
-- <skill>
+## 2. Requirements
+| # | Requirement | Type | Done |
+|--:|---|---|:--:|
+| 1 | `<what it does>` | Functional | ☐ |
+| 2 | `<how well — latency/cost/etc.>` | Non-functional | ☐ |
 
-## Requirements
-| # | Requirement | Done |
-|--:|---|:--:|
-| 1 | | ☐ |
-| 2 | | ☐ |
+## 3. Folder structure
+```text
+projects/<name>/
+├── README.md
+├── pyproject.toml
+├── src/
+├── tests/
+├── data/
+├── infra/            # Dockerfile, deploy config
+└── docs/             # architecture notes, decisions
+```
 
-## Starter
-<Point to `starter/` or describe the blank-slate setup.>
+## 4. Architecture diagram
+```mermaid
+flowchart LR
+    User --> API --> Service
+    Service --> Store[(Data)]
+```
 
-## Stretch goals
-- <optional extension>
+## 5. Milestones
+| Milestone | Deliverable | Definition of done |
+|---|---|---|
+| M1 | Walking skeleton | End-to-end path works with stubs |
+| M2 | Core feature | Primary requirement met |
+| M3 | Hardening | Errors, tests, observability |
+| M4 | Ship | Deployed + documented |
+
+## 6. Stretch goals
+- `<optional extension>`
+
+## 7. Testing strategy
+| Layer | What to test |
+|---|---|
+| Unit | `<...>` |
+| Integration | `<...>` |
+| End-to-end | `<...>` |
+| Evaluation (AI systems) | `<offline eval set + metric>` |
+
+## 8. Deployment guide
+- **Run:** `<exact commands>`
+- **Env vars:** `<reference .env.example>`
+- **Smoke test:** `<health check + one real request>`
+- **Rollback:** `<how to revert>`
+
+## 9. Future improvements
+- `<what you'd do with more time>`
+
+---
 
 ## Rubric
-| Criterion | Weight | Notes |
-|---|:--:|---|
-| Correctness | 40% | |
-| Code quality | 20% | |
-| Production-readiness | 25% | |
-| Documentation | 15% | |
+| Criterion | Weight |
+|---|:--:|
+| Correctness | 40% |
+| Code quality | 20% |
+| Production-readiness | 25% |
+| Documentation | 15% |
 
 ## Reflection
-After finishing, write 3–5 sentences: what was hard, what you'd do differently, what you now understand that you didn't before.
+`<After finishing, complete the` [retrospective template](project-retrospective-template.md)`.>`

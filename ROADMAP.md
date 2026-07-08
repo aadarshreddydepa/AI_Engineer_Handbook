@@ -1,11 +1,11 @@
 # Roadmap
 
-> The complete learning path — from working software developer to production AI Engineer.
+> The complete learning path — from working software developer to production AI Engineer, across **22 modules** organized into six phases.
 
-This roadmap breaks the journey into **modules → weeks → lessons**, with estimates for study, project, and revision time, a difficulty rating, and explicit dependencies so nothing feels disconnected.
+This roadmap breaks the journey into **modules → weeks → lessons**, with time estimates, a difficulty rating, and explicit dependencies so nothing feels disconnected.
 
 > [!NOTE]
-> Time estimates assume **~10 focused hours per week**. Adjust to your pace — the sequence matters more than the calendar. The full program is designed for **~52 weeks**.
+> Estimates assume **~10 focused hours/week**. The full program spans **~52 weeks**. Adjust to your pace — sequence matters more than the calendar.
 
 ---
 
@@ -13,11 +13,9 @@ This roadmap breaks the journey into **modules → weeks → lessons**, with est
 
 | Symbol | Meaning |
 |---|---|
-| ⭐–⭐⭐⭐⭐⭐ | Difficulty (1 = light, 5 = very demanding) |
-| 📖 | Study time (reading + exercises) |
-| 🛠️ | Project time |
-| 🔁 | Revision time |
-| ➡️ | Depends on (must complete first) |
+| ⭐–⭐⭐⭐⭐⭐ | Difficulty |
+| 📖 | Study time · 🛠️ Project time · 🔁 Revision time |
+| ➡️ | Depends on (complete first) |
 
 ---
 
@@ -25,29 +23,34 @@ This roadmap breaks the journey into **modules → weeks → lessons**, with est
 
 ```mermaid
 graph TD
-    M0[00 · Foundations] --> M1[01 · Advanced Python]
-    M1 --> M2[02 · Math & ML Intuition]
-    M2 --> M3[03 · Classical ML]
-    M3 --> M4[04 · Deep Learning]
-    M4 --> M5[05 · NLP & Transformer]
-    M5 --> M6[06 · LLMs]
-    M6 --> M7[07 · Prompt Engineering]
-    M6 --> M8[08 · RAG]
-    M6 --> M9[09 · Fine-tuning]
-    M7 --> M10[10 · Agents]
-    M8 --> M10
-    M9 --> M10
-    M10 --> M11[11 · LLMOps]
-    M11 --> M12[12 · Scaling]
-    M11 --> M13[13 · Evaluation & Observability]
-    M13 --> M14[14 · Safety & Security]
-    M12 --> M15[15 · Capstone]
-    M13 --> M15
-    M14 --> M15
+    M0[00 Orientation] --> M1[01 Advanced Python]
+    M1 --> M2[02 Computer Science]
+    M1 --> M3[03 Linux]
+    M3 --> M4[04 Git]
+    M1 --> M5[05 SQL]
+    M2 --> M6[06 Mathematics]
+    M6 --> M7[07 Data Analysis]
+    M5 --> M7
+    M7 --> M8[08 Machine Learning]
+    M6 --> M8
+    M8 --> M9[09 Deep Learning]
+    M9 --> M10[10 NLP]
+    M10 --> M11[11 LLMs]
+    M11 --> M12[12 Prompt Engineering]
+    M12 --> M13[13 RAG]
+    M13 --> M14[14 AI Agents]
+    M14 --> M15[15 Fine-tuning]
+    M4 --> M16[16 MLOps]
+    M15 --> M16
+    M16 --> M17[17 Cloud]
+    M17 --> M18[18 System Design]
+    M16 --> M19[19 Production AI]
+    M18 --> M19
+    M2 --> M20[20 Interview Prep]
+    M18 --> M20
+    M19 --> M21[21 Capstone]
+    M20 --> M21
 ```
-
-> [!TIP]
-> Modules 07, 08, and 09 all branch from Module 06 and can be studied in any order — but complete all three before Module 10 (Agents).
 
 ---
 
@@ -55,196 +58,84 @@ graph TD
 
 | Phase | Modules | Weeks | Focus |
 |---|---|:---:|---|
-| **I — Foundations** | 00–01 | 1–4 | Engineering environment & advanced Python |
-| **II — ML Core** | 02–04 | 5–16 | Math, classical ML, deep learning |
-| **III — Language & LLMs** | 05–06 | 17–24 | Transformers and large language models |
-| **IV — Applied LLM Engineering** | 07–10 | 25–38 | Prompting, RAG, fine-tuning, agents |
-| **V — Production** | 11–14 | 39–48 | Deployment, scaling, evaluation, safety |
-| **VI — Mastery** | 15 | 49–52 | Capstone systems & interview prep |
+| **I — Engineering Foundations** | 00–05 | 1–12 | Python, CS, Linux, Git, SQL |
+| **II — Data & Math** | 06–07 | 13–18 | Math intuition & data analysis |
+| **III — Machine Learning** | 08–09 | 19–26 | Classical ML & deep learning |
+| **IV — Language & LLMs** | 10–15 | 27–43 | NLP, LLMs, prompting, RAG, agents, fine-tuning |
+| **V — Production Engineering** | 16–19 | 44–53 | MLOps, cloud, system design, production |
+| **VI — Mastery** | 20–21 | 54–57 | Interview prep & capstones |
 
-**Totals:** 📖 ~360h study · 🛠️ ~140h projects · 🔁 ~70h revision → **~570 hours**
-
----
-
-## Phase I — Foundations (Weeks 1–4)
-
-### Module 00 · Foundations & Engineering Setup ⭐
-➡️ None · 📖 6h · 🛠️ 2h · 🔁 1h
-
-| Week | Lessons |
-|:---:|---|
-| 1 | What is an AI Engineer? · The AI systems landscape · Dev environment (uv/poetry, VS Code, GPUs, notebooks) · Reproducibility & experiment mindset |
-
-### Module 01 · Advanced Python for AI ⭐⭐
-➡️ M00 · 📖 12h · 🛠️ 4h · 🔁 2h
-
-| Week | Lessons |
-|:---:|---|
-| 2 | Type hints & typing discipline · Dataclasses & Pydantic · Iterators, generators, comprehensions at scale |
-| 3 | Async & concurrency · Multiprocessing vs threading vs async for AI workloads |
-| 4 | Packaging, dependency management, profiling & performance · NumPy vectorization |
+**Totals (approx.):** 📖 ~420h · 🛠️ ~170h · 🔁 ~75h → **~665 hours** across **~57 weeks**
 
 ---
 
-## Phase II — ML Core (Weeks 5–16)
+## Phase I — Engineering Foundations (Weeks 1–12)
 
-### Module 02 · Math & ML Intuition ⭐⭐⭐
-➡️ M01 · 📖 20h · 🛠️ 4h · 🔁 4h
+| # | Module | ➡️ Depends | Weeks | Est. |
+|---|---|---|:---:|---|
+| 00 | Orientation ⭐ | — | 1 | 📖 6h 🔁 1h |
+| 01 | Advanced Python ⭐⭐ | 00 | 2–3 | 📖 12h 🛠️ 4h |
+| 02 | Computer Science ⭐⭐⭐ | 01 | 4–5 | 📖 16h 🛠️ 4h |
+| 03 | Linux ⭐⭐ | — | 6–7 | 📖 12h 🛠️ 3h |
+| 04 | Git ⭐⭐ | 03 | 8 | 📖 6h 🛠️ 2h |
+| 05 | SQL ⭐⭐ | 01 | 9–12 | 📖 14h 🛠️ 6h |
 
-| Week | Lessons |
-|:---:|---|
-| 5 | Linear algebra for ML (vectors, matrices, dot products, projections) |
-| 6 | Calculus & gradients · The chain rule as the engine of learning |
-| 7 | Probability & statistics · Distributions, expectation, Bayes |
-| 8 | Optimization intuition · Loss surfaces, gradient descent |
+## Phase II — Data & Math (Weeks 13–18)
 
-### Module 03 · Classical Machine Learning ⭐⭐⭐
-➡️ M02 · 📖 24h · 🛠️ 8h · 🔁 4h
+| # | Module | ➡️ Depends | Weeks | Est. |
+|---|---|---|:---:|---|
+| 06 | Mathematics ⭐⭐⭐ | 02 | 13–16 | 📖 20h 🔁 4h |
+| 07 | Data Analysis ⭐⭐⭐ | 05, 06 | 17–18 | 📖 12h 🛠️ 6h |
 
-| Week | Lessons |
-|:---:|---|
-| 9 | The ML workflow · Data splits, leakage, the bias–variance tradeoff |
-| 10 | Linear & logistic regression from scratch |
-| 11 | Trees, ensembles, gradient boosting · Feature engineering |
-| 12 | Evaluation: metrics, cross-validation, calibration, error analysis |
+## Phase III — Machine Learning (Weeks 19–26)
 
-### Module 04 · Deep Learning Foundations ⭐⭐⭐⭐
-➡️ M03 · 📖 28h · 🛠️ 10h · 🔁 5h
+| # | Module | ➡️ Depends | Weeks | Est. |
+|---|---|---|:---:|---|
+| 08 | Machine Learning ⭐⭐⭐ | 06, 07 | 19–22 | 📖 24h 🛠️ 8h |
+| 09 | Deep Learning ⭐⭐⭐⭐ | 08 | 23–26 | 📖 28h 🛠️ 10h |
 
-| Week | Lessons |
-|:---:|---|
-| 13 | Neurons, layers, activations · Backpropagation from scratch |
-| 14 | PyTorch deeply · Tensors, autograd, modules, training loops |
-| 15 | Optimization in practice · Regularization, normalization, initialization |
-| 16 | Debugging neural nets · Overfitting, vanishing gradients, reproducibility |
+> 🏁 **Milestone A** — Rebuild a small neural net from memory; explain backprop aloud.
 
----
+## Phase IV — Language & LLMs (Weeks 27–43)
 
-## Phase III — Language & LLMs (Weeks 17–24)
+| # | Module | ➡️ Depends | Weeks | Est. |
+|---|---|---|:---:|---|
+| 10 | NLP ⭐⭐⭐⭐ | 09 | 27–30 | 📖 24h 🛠️ 8h |
+| 11 | LLMs ⭐⭐⭐⭐ | 10 | 31–34 | 📖 24h 🔁 5h |
+| 12 | Prompt Engineering ⭐⭐ | 11 | 35–36 | 📖 12h 🛠️ 6h |
+| 13 | RAG ⭐⭐⭐ | 12 | 37–38 | 📖 16h 🛠️ 10h |
+| 14 | AI Agents ⭐⭐⭐⭐ | 13 | 39–40 | 📖 16h 🛠️ 12h |
+| 15 | Fine-tuning ⭐⭐⭐⭐ | 14 | 41–43 | 📖 20h 🛠️ 10h |
 
-### Module 05 · NLP & the Transformer ⭐⭐⭐⭐
-➡️ M04 · 📖 24h · 🛠️ 8h · 🔁 5h
+> 🏁 **Milestone B/C** — Diagram a Transformer + decoding loop; design a RAG + agent system on a blank page.
 
-| Week | Lessons |
-|:---:|---|
-| 17 | Text representation · Tokenization (BPE, WordPiece), embeddings |
-| 18 | Sequence models & their limits (RNN → attention motivation) |
-| 19 | The attention mechanism from first principles |
-| 20 | Building a Transformer block from scratch |
+## Phase V — Production Engineering (Weeks 44–53)
 
-### Module 06 · Large Language Models ⭐⭐⭐⭐
-➡️ M05 · 📖 24h · 🛠️ 6h · 🔁 5h
+| # | Module | ➡️ Depends | Weeks | Est. |
+|---|---|---|:---:|---|
+| 16 | MLOps ⭐⭐⭐⭐ | 04, 15 | 44–47 | 📖 20h 🛠️ 10h |
+| 17 | Cloud ⭐⭐⭐⭐ | 16 | 48–49 | 📖 14h 🛠️ 4h |
+| 18 | System Design ⭐⭐⭐⭐⭐ | 17 | 50–51 | 📖 16h 🛠️ 4h |
+| 19 | Production AI ⭐⭐⭐⭐ | 16, 18 | 52–53 | 📖 16h 🛠️ 8h |
 
-| Week | Lessons |
-|:---:|---|
-| 21 | Pretraining objectives · Next-token prediction, scaling laws |
-| 22 | Decoding strategies · Temperature, top-k/top-p, beam search |
-| 23 | Context windows, KV cache, positional encodings |
-| 24 | The modern LLM landscape · Open vs closed, model selection |
+## Phase VI — Mastery (Weeks 54–57)
 
----
+| # | Module | ➡️ Depends | Weeks | Est. |
+|---|---|---|:---:|---|
+| 20 | Interview Preparation ⭐⭐⭐⭐ | 02, 18 | 54–55 | 📖 12h 🛠️ 8h |
+| 21 | Capstone Projects ⭐⭐⭐⭐⭐ | 19, 20 | 56–57 | 🛠️ 30h |
 
-## Phase IV — Applied LLM Engineering (Weeks 25–38)
-
-### Module 07 · Prompt Engineering ⭐⭐
-➡️ M06 · 📖 12h · 🛠️ 6h · 🔁 3h
-
-| Week | Lessons |
-|:---:|---|
-| 25 | Anatomy of a prompt · System/user roles, structured output |
-| 26 | Reasoning techniques · Few-shot, chain-of-thought, self-consistency |
-| 27 | Prompt reliability · Guardrails, JSON schemas, testing prompts |
-
-### Module 08 · Retrieval-Augmented Generation ⭐⭐⭐
-➡️ M06 · 📖 20h · 🛠️ 10h · 🔁 4h
-
-| Week | Lessons |
-|:---:|---|
-| 28 | Why RAG · Grounding, hallucination, knowledge cutoffs |
-| 29 | Embeddings & vector databases · Chunking strategies |
-| 30 | Retrieval quality · Hybrid search, reranking, evaluation |
-| 31 | Building a production RAG pipeline |
-
-### Module 09 · Fine-tuning & Adaptation ⭐⭐⭐⭐
-➡️ M06 · 📖 20h · 🛠️ 10h · 🔁 4h
-
-| Week | Lessons |
-|:---:|---|
-| 32 | When to fine-tune vs prompt vs RAG |
-| 33 | Parameter-efficient fine-tuning · LoRA / QLoRA / PEFT |
-| 34 | Data curation & instruction tuning |
-| 35 | Alignment basics · RLHF/DPO intuition |
-
-### Module 10 · AI Agents & Tool Use ⭐⭐⭐⭐
-➡️ M07, M08, M09 · 📖 20h · 🛠️ 12h · 🔁 4h
-
-| Week | Lessons |
-|:---:|---|
-| 36 | Agent foundations · The reasoning–action loop |
-| 37 | Tools, function calling, structured actions |
-| 38 | Multi-step & multi-agent orchestration · Memory, planning, failure recovery |
-
----
-
-## Phase V — Production (Weeks 39–48)
-
-### Module 11 · LLMOps & Deployment ⭐⭐⭐⭐
-➡️ M10 · 📖 20h · 🛠️ 10h · 🔁 4h
-
-| Week | Lessons |
-|:---:|---|
-| 39 | Serving models · APIs, batching, streaming |
-| 40 | Packaging & containerization · Docker, environments |
-| 41 | CI/CD for AI systems · Testing, versioning, rollbacks |
-| 42 | Caching, rate limiting, cost control |
-
-### Module 12 · Scaling & Infrastructure ⭐⭐⭐⭐⭐
-➡️ M11 · 📖 16h · 🛠️ 6h · 🔁 4h
-
-| Week | Lessons |
-|:---:|---|
-| 43 | GPUs & accelerators · Memory, quantization, inference optimization |
-| 44 | Distributed training & serving · Parallelism strategies |
-| 45 | Latency, throughput, and cost engineering |
-
-### Module 13 · Evaluation & Observability ⭐⭐⭐⭐
-➡️ M11 · 📖 16h · 🛠️ 8h · 🔁 4h
-
-| Week | Lessons |
-|:---:|---|
-| 46 | Evaluating LLM systems · Offline metrics, LLM-as-judge |
-| 47 | Observability · Tracing, logging, monitoring in production |
-| 48 | Feedback loops · Data flywheels, regression detection |
-
-### Module 14 · Safety, Security & Ethics ⭐⭐⭐
-➡️ M13 · 📖 12h · 🛠️ 4h · 🔁 3h
-
-| Week | Lessons |
-|:---:|---|
-| (within 46–48) | Prompt injection & security · Guardrails & red-teaming · Privacy, bias, governance |
-
----
-
-## Phase VI — Mastery (Weeks 49–52)
-
-### Module 15 · Capstone Projects ⭐⭐⭐⭐⭐
-➡️ M12, M13, M14 · 📖 8h · 🛠️ 30h · 🔁 4h
-
-| Week | Focus |
-|:---:|---|
-| 49–50 | Design & build a full production AI system (RAG + agent + serving + eval) |
-| 51 | Load-test, observe, harden, and document it |
-| 52 | Interview preparation · System design · Portfolio polish |
+> 🏁 **Milestone D** — Full system-design mock interview + capstone review.
 
 ---
 
 ## Revision checkpoints
 
-| After | Checkpoint |
-|---|---|
-| Module 04 | **Milestone A** — ML & DL foundations review |
-| Module 06 | **Milestone B** — Transformers & LLM internals review |
-| Module 10 | **Milestone C** — Applied LLM engineering review |
-| Module 15 | **Milestone D** — Full-system & interview review |
+| After | Checkpoint | Audit |
+|---|---|---|
+| Module 09 | **A** | ML & DL foundations |
+| Module 11 | **B** | Transformers & LLM internals |
+| Module 15 | **C** | Applied LLM engineering (prompting → RAG → agents → fine-tuning) |
+| Module 21 | **D** | Full-system & interview readiness |
 
-See [LEARNING_STRATEGY.md](LEARNING_STRATEGY.md) for how these checkpoints use spaced repetition and active recall.
+See [LEARNING_STRATEGY.md](LEARNING_STRATEGY.md) for how checkpoints use spaced repetition and active recall, and [CURRICULUM.md](CURRICULUM.md) for lesson-level detail.

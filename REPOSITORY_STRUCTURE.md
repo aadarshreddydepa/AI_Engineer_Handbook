@@ -7,41 +7,52 @@
 ## Top-level layout
 
 ```text
-ai-engineers-handbook/
-├── README.md                  # Entry point and overview
-├── ROADMAP.md                 # Modules → weeks → lessons, with estimates
-├── CURRICULUM.md              # Lesson-by-lesson learning outcomes
-├── REPOSITORY_STRUCTURE.md    # This file
-├── LEARNING_STRATEGY.md       # How to retain the material
-├── CONTRIBUTING.md            # Style guide and standards
-├── PROGRESS_TRACKER.md        # Personal progress checklist
-├── CHANGELOG.md               # History of changes
-├── RESOURCES.md               # Curated external resources
-├── GLOSSARY.md                # Master glossary (index)
-├── FAQ.md                     # Frequently asked questions
+AI-Engineer-Handbook/
+├── README.md ROADMAP.md CURRICULUM.md ...   # root planning docs
+├── LICENSE.md  .gitignore
 │
-├── docs/                      # The book itself
-│   └── modules/
-│       ├── 00-foundations/
-│       ├── 01-advanced-python/
-│       ├── 02-math-ml-intuition/
-│       └── ... one folder per module
+├── docs/                       # The book — 22 module folders
+│   ├── 00-Orientation/
+│   ├── 01-Advanced-Python/
+│   ├── ...
+│   └── 21-Capstone-Projects/
 │
 ├── assets/
-│   ├── images/                # Illustrations, screenshots, cover art
-│   └── diagrams/              # Source files for diagrams (e.g. .mmd, .excalidraw)
+│   ├── diagrams/               # Mermaid/Excalidraw sources + exports
+│   ├── images/                 # Illustrations, screenshots
+│   ├── icons/                  # Reusable icons & badges
+│   └── cheatsheets/            # Repo-wide printable cheat sheets
 │
-├── exercises/                 # Hands-on practice, per module
-├── quizzes/                   # Self-assessment questions & answers
-├── flashcards/                # Spaced-repetition cards (Q/A)
-├── projects/                  # Buildable projects, per module + capstones
-├── notebooks/                 # Jupyter notebooks for interactive lessons
-├── references/                # Deep-dive notes, paper summaries
-├── cheatsheets/               # Quick-reference one-pagers
-├── interview-prep/            # System design, questions, mock interviews
-├── glossary/                  # Per-topic glossary fragments
-├── templates/                 # Lesson/exercise/project templates
-└── .github/workflows/         # CI (link checks, linting)
+├── code/                       # Standalone runnable code samples
+├── notebooks/                  # Interactive Jupyter lessons
+├── exercises/                  # Cross-module exercise sets
+├── quizzes/                    # Cross-module & cumulative quizzes
+├── flashcards/                 # Global/cumulative decks
+├── interview-preparation/      # Question banks, system design, rubrics
+├── projects/                   # Large & capstone projects
+├── templates/                  # Reusable Markdown templates
+├── references/                 # Papers, books, reading notes
+├── scripts/                    # Repository automation
+└── archive/                    # Superseded material (never linked live)
+```
+
+---
+
+## Module folders
+
+Every module under `docs/` uses the **same eight subfolders** so the book is predictable:
+
+```text
+docs/NN-Name/
+├── README.md          # Purpose, outcomes, navigation
+├── weeks/             # week-01.md, week-02.md, ...
+├── diagrams/          # topic.mmd, topic.png
+├── exercises/         # exercise-01.md (+ solution-01.*)
+├── projects/          # project-01/ (README.md, starter/, rubric.md)
+├── quizzes/           # quiz-01.md (+ answers-01.md)
+├── flashcards/        # deck.md
+├── cheat-sheets/      # topic-cheatsheet.md
+└── references/        # paper summaries, deep dives
 ```
 
 ---
@@ -50,45 +61,45 @@ ai-engineers-handbook/
 
 | Folder | Contains | Naming convention |
 |---|---|---|
-| `docs/modules/<NN>-<slug>/` | Lesson Markdown files, one per lesson | `NN.M-lesson-slug.md` (e.g. `04.2-backpropagation.md`) |
-| `assets/images/` | PNG/JPG/SVG illustrations referenced by lessons | `topic-descriptor.png` |
-| `assets/diagrams/` | Editable diagram sources | `topic.mmd`, `topic.excalidraw` |
-| `exercises/<NN>-<slug>/` | Problem statements + solution files | `exercise-N.md`, `solution-N.py` |
-| `quizzes/<NN>-<slug>/` | Question banks with answer keys | `quiz.md`, `answers.md` |
-| `flashcards/` | Q/A decks, one file per module | `NN-<slug>.md` |
-| `projects/<NN>-<slug>/` | Project brief, starter code, rubric | `README.md`, `starter/`, `rubric.md` |
-| `notebooks/` | `.ipynb` companions | `NN.M-topic.ipynb` |
-| `references/` | Paper summaries, deep dives | `topic.md` |
-| `cheatsheets/` | One-page references | `topic-cheatsheet.md` |
-| `interview-prep/` | Questions, system design, rubrics | `topic.md` |
-| `glossary/` | Topic-scoped term fragments merged into `GLOSSARY.md` | `NN-<slug>.md` |
-| `templates/` | Reusable scaffolds | `lesson-template.md`, etc. |
+| `docs/NN-Name/` | A module | `NN-Name` (zero-padded, `Title-Case`) |
+| `…/weeks/` | Weekly lessons | `week-NN.md` |
+| `…/exercises/` | Problems + solutions | `exercise-NN.md`, `solution-NN.*` |
+| `…/projects/` | Project folders | `project-NN/` |
+| `…/quizzes/` | Quizzes + keys | `quiz-NN.md`, `answers-NN.md` |
+| `…/flashcards/` | Decks | `deck.md` |
+| `…/cheat-sheets/` | One-pagers | `topic-cheatsheet.md` |
+| `…/diagrams/` | Diagram sources | `topic.mmd`, `topic.png` |
+| `assets/images/` | Figures | `topic-descriptor.png` |
+| `code/` | Runnable samples | `NN-topic/` |
+| `notebooks/` | Notebooks | `NN.M-topic.ipynb` |
+| `templates/` | Templates | `type-template.md` |
 
 ---
 
-## How a single lesson maps across folders
+## How one concept maps across the repo
 
 ```mermaid
 flowchart TD
-    L[docs/modules/04-deep-learning/04.2-backpropagation.md]
-    L --> I[assets/images/backprop-graph.png]
-    L --> E[exercises/04-deep-learning/]
-    L --> Q[quizzes/04-deep-learning/]
-    L --> F[flashcards/04-deep-learning.md]
-    L --> N[notebooks/04.2-backpropagation.ipynb]
-    L --> R[references/backpropagation.md]
+    L[docs/10-NLP/weeks/week-03.md] --> I[assets/images/attention-heads.png]
+    L --> D[docs/10-NLP/diagrams/attention.mmd]
+    L --> E[docs/10-NLP/exercises/]
+    L --> Q[docs/10-NLP/quizzes/]
+    L --> F[docs/10-NLP/flashcards/deck.md]
+    L --> N[notebooks/10.3-attention.ipynb]
+    L --> R[docs/10-NLP/references/attention-is-all-you-need.md]
 ```
 
-One concept is reinforced across **reading, practice, testing, retention, and interactive exploration** — this is deliberate (see [LEARNING_STRATEGY.md](LEARNING_STRATEGY.md)).
+One concept is reinforced across **reading, practice, testing, retention, and interactive exploration** — by design (see [LEARNING_STRATEGY.md](LEARNING_STRATEGY.md)).
 
 ---
 
 ## Conventions
 
 > [!IMPORTANT]
-> - **Module numbers are zero-padded** (`00`–`15`) so folders sort correctly.
-> - **Every folder has a `README.md`** describing its contents once it holds real content.
-> - **Images are always referenced with a placeholder + description** until the real asset exists.
-> - **Never renumber modules or lessons** once published; append instead. See [CONTRIBUTING.md](CONTRIBUTING.md).
+> - **Module numbers are zero-padded** (`00`–`21`) so folders sort correctly.
+> - **Every folder has a `README.md`** with purpose + navigation.
+> - **Never renumber published modules or lessons** — append instead.
+> - **Images use a placeholder + description** until the real asset exists.
+> - **Superseded content moves to `archive/`** and is never linked from live pages.
 
-Placeholder `.gitkeep` files hold currently-empty directories in version control and are removed as real content lands.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full Markdown and naming standards. The structure is generated and kept consistent by [scripts/generate_structure.py](scripts/generate_structure.py).
