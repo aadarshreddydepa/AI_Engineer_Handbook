@@ -184,3 +184,35 @@
 | **Fault tolerance** | A system's ability to keep working when components fail. |
 | **Stack trace (traceback)** | The chain of function calls at the moment of an error. |
 | **Observability** | Understanding a system's behavior via logs, metrics, and traces. |
+
+## Linux for AI Engineers (Module 03)
+
+| Term | Definition |
+|---|---|
+| **Kernel** | The core of the OS that manages hardware, processes, and memory (Linux is a kernel). |
+| **Distribution (distro)** | A complete packaged OS built around the Linux kernel (Ubuntu, Fedora, Alpine). |
+| **Shell** | A program (bash, zsh) that reads and runs your commands, composing tools via pipes. |
+| **System call (syscall)** | A user-space program's request to the kernel for a privileged service (I/O, process, network). |
+| **`strace`** | A tool that traces the system calls a program makes — for debugging what it tried to do. |
+| **Pipe / redirection** | `\|` connects one program's stdout to another's stdin; `>`/`>>`/`2>&1` send streams to files. |
+| **PATH** | The ordered list of directories the shell searches to find a command. |
+| **Environment variable** | A named value available to the shell and its child processes (config/secrets). |
+| **Symlink (symbolic link)** | A file that points to another path; used for atomic model/version swaps. |
+| **Permissions / `chmod`** | Owner/group/other read-write-execute controls on files; `chmod` sets them. |
+| **SUID** | A bit making an executable run with its owner's privileges (e.g., `passwd`) — security-critical. |
+| **Process / daemon** | A running program; a daemon is a long-running background service process. |
+| **`tmux`** | A terminal multiplexer whose sessions persist across disconnects — used for long training jobs. |
+| **Signal (SIGTERM/SIGKILL)** | Messages to a process: SIGTERM = graceful shutdown, SIGKILL = force-kill. |
+| **`nvidia-smi`** | The tool showing GPU utilization, memory, and processes — checked constantly in AI work. |
+| **systemd** | The init system (PID 1) and service manager on most modern Linux distros. |
+| **`journalctl`** | The command to read the systemd journal (service logs). |
+| **SSH / SSH key** | Secure Shell for encrypted remote access; key-based auth uses a public/private key pair. |
+| **`rsync`** | An efficient file-transfer/sync tool that copies only differences and can resume. |
+| **Load average** | The average number of processes wanting to run (interpret relative to core count). |
+| **Swap** | Disk-backed memory used when RAM is exhausted; heavy swap signals near-OOM. |
+| **UFW / firewall** | A tool controlling which network ports accept connections (default-deny, allow needed). |
+| **Fail2Ban** | A tool that auto-bans IPs after repeated failed logins (brute-force protection). |
+| **Namespace** | A Linux kernel feature isolating a container's view (PIDs, network, filesystem, users). |
+| **cgroup** | A Linux kernel feature limiting a process/container's resource use (CPU, memory, I/O). |
+| **Container** | An isolated Linux process (namespaces + cgroups + union filesystem), not a virtual machine. |
+| **OverlayFS / union filesystem** | Merges stacked, cached image layers into one filesystem view (Docker images). |

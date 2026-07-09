@@ -9,8 +9,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 03 · Linux — lesson content
+- Module 04 · Git — lesson content
 - Weekly lessons authored module by module
+
+---
+
+## [0.8.0] — 2026-07-09
+
+### Added
+- **Module 03 · Linux for AI Engineers — complete.**
+  - 17 lessons (`docs/03-Linux/weeks/03.1`–`03.17`): introduction (kernel vs OS vs distro, why AI/cloud/Docker/K8s use Linux), architecture (kernel/user space/syscalls/scheduler), filesystem (hierarchy, inodes, symlinks, `/proc`, `/dev`), terminal mastery (pipes, redirection, PATH, env vars, globs), essential commands (grep/find/awk/sed/xargs/…), permissions (chmod/chown, SUID/SGID/sticky, least privilege), processes (states, tmux, nvidia-smi, signals), systemd services, networking (SSH keys, rsync, diagnostics), storage (df/du, ext4/xfs, fstab), logs (journalctl, dmesg, rotation), bash scripting (`set -euo pipefail`, functions, traps, exit codes), package & environment management (apt vs uv/conda), performance monitoring (free/vmstat/iostat/sar, bottleneck analysis), security (SSH hardening, UFW, Fail2Ban, secrets), Docker preparation (namespaces/cgroups/OverlayFS), and a workflow + projects + summary lesson.
+  - Companion artifacts: consolidated [exercises](docs/03-Linux/exercises/README.md) (terminal/debug/log/permission/bash, difficulty-ramped), a 28-question [quiz](docs/03-Linux/quizzes/quiz-01.md) with model [answers](docs/03-Linux/quizzes/answers-01.md), a full [flashcard deck](docs/03-Linux/flashcards/deck.md), and a [master cheat sheet](docs/03-Linux/cheat-sheets/linux-cheatsheet.md).
+  - Six mini-projects threaded through their host lessons: log analyzer, file backup utility, dataset organizer, monitoring dashboard, deployment automation, and server health & security checker — plus a "day in the life of an AI Engineer" end-to-end workflow.
+  - Module [lesson index](docs/03-Linux/weeks/README.md); linked from the module README.
+- Glossary: added a "Linux for AI Engineers (Module 03)" section (kernel, distro, shell, syscall, systemd, `journalctl`, SSH keys, `rsync`, `tmux`, `nvidia-smi`, load average, swap, UFW, Fail2Ban, namespaces, cgroups, containers, and more).
+
+### Notes
+- Teaches Linux **as an operating system** (not a command list), with every topic tied to real AI-Engineer usage (SSH into GPU servers, tmux training jobs, nvidia-smi, systemd model services, rsync datasets, hardening) and cross-referenced to Modules 00–02. The Docker-preparation lesson reveals containers as namespaces + cgroups + union filesystems, priming Module 16.
 
 ---
 

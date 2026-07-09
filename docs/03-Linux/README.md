@@ -17,6 +17,32 @@ This module covers **Linux**. The command line and operating-system foundations 
 - Permissions, users, and environment management
 - Networking basics and remote servers
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md). **Keep a Linux terminal open** and type every command.
+
+| # | Lesson |
+|---|---|
+| 03.1 | [Introduction to Linux](weeks/03.1-introduction.md) |
+| 03.2 | [Linux Architecture](weeks/03.2-architecture.md) |
+| 03.3 | [The Filesystem](weeks/03.3-filesystem.md) |
+| 03.4 | [Terminal Mastery](weeks/03.4-terminal-mastery.md) |
+| 03.5 | [Essential Commands](weeks/03.5-essential-commands.md) |
+| 03.6 | [Permissions & Ownership](weeks/03.6-permissions.md) |
+| 03.7 | [Processes](weeks/03.7-processes.md) |
+| 03.8 | [Services with systemd](weeks/03.8-services-systemd.md) |
+| 03.9 | [Networking](weeks/03.9-networking.md) |
+| 03.10 | [Storage](weeks/03.10-storage.md) |
+| 03.11 | [Logs](weeks/03.11-logs.md) |
+| 03.12 | [Bash Scripting](weeks/03.12-bash-scripting.md) |
+| 03.13 | [Package & Environment Management](weeks/03.13-package-environment.md) |
+| 03.14 | [Performance Monitoring](weeks/03.14-performance-monitoring.md) |
+| 03.15 | [Security](weeks/03.15-security.md) |
+| 03.16 | [Docker Preparation](weeks/03.16-docker-preparation.md) |
+| 03.17 | [The AI Engineer Workflow, Projects & Summary](weeks/03.17-workflow-projects-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/linux-cheatsheet.md)
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:
