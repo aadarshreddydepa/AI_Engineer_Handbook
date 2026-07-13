@@ -17,6 +17,28 @@ This module covers **Git**. Version control and collaboration workflows for real
 - Rebasing, resolving conflicts, and history hygiene
 - Git for experiments, data, and large files
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md). Keep a **throwaway practice repo** open for the dangerous commands.
+
+| # | Lesson |
+|---|---|
+| 04.1 | [Git Internals](weeks/04.1-git-internals.md) |
+| 04.2 | [Commit History](weeks/04.2-commit-history.md) |
+| 04.3 | [Branching Strategies](weeks/04.3-branching-strategies.md) |
+| 04.4 | [Advanced Branch Management](weeks/04.4-advanced-branch-management.md) |
+| 04.5 | [Merge Conflict Resolution](weeks/04.5-merge-conflicts.md) |
+| 04.6 | [Tags & Releases](weeks/04.6-tags-releases.md) |
+| 04.7 | [GitHub Collaboration](weeks/04.7-github-collaboration.md) |
+| 04.8 | [Repository Management](weeks/04.8-repository-management.md) |
+| 04.9 | [Large Files: Git LFS](weeks/04.9-large-files.md) |
+| 04.10 | [Automation with Git Hooks](weeks/04.10-automation.md) |
+| 04.11 | [GitHub Actions](weeks/04.11-github-actions.md) |
+| 04.12 | [Debugging Git](weeks/04.12-debugging-git.md) |
+| 04.13 | [AI Project Workflow, Projects & Summary](weeks/04.13-workflow-projects-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/git-cheatsheet.md)
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:

@@ -9,8 +9,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 04 · Git — lesson content
+- Module 05 · SQL — lesson content
 - Weekly lessons authored module by module
+
+---
+
+## [0.9.0] — 2026-07-09
+
+### Added
+- **Module 04 · Advanced Git & Collaboration for AI Engineers — complete.**
+  - 13 lessons (`docs/04-Git/weeks/04.1`–`04.13`): Git internals (objects, refs, reflog), commit history (the DAG, merges, detached HEAD), branching strategies (GitHub Flow/Git Flow/trunk-based), advanced branch management (rebase, interactive rebase, cherry-pick, reset, revert, reflog recovery), merge conflict resolution, tags & releases (SemVer, GitHub Releases), GitHub collaboration (PRs, reviews, protected branches, merge strategies), repository management (README/CONTRIBUTING/CODEOWNERS/templates), large files (Git LFS, `.gitignore`), automation (Git hooks, pre-commit), GitHub Actions (CI/CD), debugging Git (recovery walkthroughs), and a complete AI-project-workflow + projects + summary lesson.
+  - Companion artifacts: consolidated [exercises](docs/04-Git/exercises/README.md) (branching, conflict labs, rebase, recovery drills, collaboration, CI — difficulty-ramped), a 26-question [quiz](docs/04-Git/quizzes/quiz-01.md) with model [answers](docs/04-Git/quizzes/answers-01.md), a full [flashcard deck](docs/04-Git/flashcards/deck.md), and a [master cheat sheet](docs/04-Git/cheat-sheets/git-cheatsheet.md).
+  - Five mini-projects (professional OSS repo, CI pipeline, release automation, AI project with Git LFS, branching-strategy design) plus a Git recovery playbook, and an end-to-end "feature branch → PR → review → merge → tag → release" workflow.
+  - Module [lesson index](docs/04-Git/weeks/README.md); linked from the module README.
+- Glossary: added an "Advanced Git & Collaboration (Module 04)" section (objects/refs/reflog, rebase, reset/revert, merge conflict, protected branch, CODEOWNERS, Git LFS, pre-commit, GitHub Actions, `git bisect`, and more).
+
+### Notes
+- Assumes Git fundamentals (no `init`/`add`/`commit` reteaching); focuses on internals, recovery, collaboration, releases, automation, and AI-project specifics (notebooks, LFS, model/data versioning, secret handling). Heavily cross-referenced to Modules 00–03; the object model builds on Module 02 data structures, and CI runs on Module 03 Linux runners.
 
 ---
 

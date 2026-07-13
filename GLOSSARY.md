@@ -216,3 +216,31 @@
 | **cgroup** | A Linux kernel feature limiting a process/container's resource use (CPU, memory, I/O). |
 | **Container** | An isolated Linux process (namespaces + cgroups + union filesystem), not a virtual machine. |
 | **OverlayFS / union filesystem** | Merges stacked, cached image layers into one filesystem view (Docker images). |
+
+## Advanced Git & Collaboration (Module 04)
+
+| Term | Definition |
+|---|---|
+| **Blob / tree / commit** | Git's core objects: a file's contents / a directory listing / a snapshot + parent(s) + metadata. |
+| **Content addressing** | Storing objects keyed by the SHA hash of their content (gives deduplication and integrity). |
+| **HEAD** | A pointer to the current branch (hence the current commit) — "where you are now." |
+| **Reflog** | Git's record of every HEAD/branch-pointer move, used to recover "lost" commits. |
+| **Detached HEAD** | HEAD pointing directly at a commit instead of a branch; commits there can be lost if you switch away without branching. |
+| **Fast-forward / three-way merge** | Sliding a branch pointer forward (linear) / creating a merge commit with two parents when both branches diverged. |
+| **Rebase** | Replaying commits onto a new base for linear history (creating new commit hashes). |
+| **Interactive rebase** | `git rebase -i` — squash, reorder, reword, edit, or drop commits before sharing. |
+| **Cherry-pick** | Copying a single commit onto the current branch. |
+| **Reset (soft/mixed/hard)** | Moving a branch pointer, optionally unstaging and (hard) discarding uncommitted changes. |
+| **Revert** | Creating a new commit that undoes a previous one — safe for shared history. |
+| **Merge conflict** | When two branches change the same lines differently, requiring a human to resolve. |
+| **Annotated tag** | A tag object (tagger, date, message, optional signature) used to mark releases. |
+| **GitHub Flow / Git Flow / trunk-based** | Branching strategies: simple PR flow / structured release branches / frequent trunk integration. |
+| **Pull request (PR)** | A request to merge a branch plus a space to review, discuss, and CI-check it. |
+| **Protected branch** | A branch with enforced rules (require PR/review/CI, no force-push) protecting `main`. |
+| **Squash merge** | Merging a PR as a single combined commit for a clean, linear history. |
+| **CODEOWNERS** | A file mapping paths to owners so GitHub auto-requests their review. |
+| **Git LFS** | Large File Storage — stores a pointer in Git and the actual large file in a separate store. |
+| **`.gitignore`** | A file listing patterns Git should not track (data, caches, secrets). |
+| **Git hook / pre-commit** | Scripts Git runs on events; the `pre-commit` framework runs shared checks before each commit. |
+| **GitHub Actions / CI/CD** | GitHub's automation for running tests/lint on every push and deploying passing code. |
+| **`git bisect`** | A binary search through history to find the commit that introduced a bug. |
