@@ -17,6 +17,31 @@ This module covers **SQL**. Relational data modeling and querying for AI applica
 - Indexing and query optimization
 - SQL in data and ML pipelines
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md). **Run a real PostgreSQL** and execute every query.
+
+| # | Lesson |
+|---|---|
+| 05.1 | [Introduction to Databases](weeks/05.1-introduction.md) |
+| 05.2 | [Relational Databases](weeks/05.2-relational-databases.md) |
+| 05.3 | [SQL Fundamentals](weeks/05.3-sql-fundamentals.md) |
+| 05.4 | [Advanced SQL](weeks/05.4-advanced-sql.md) |
+| 05.5 | [Query Optimization](weeks/05.5-query-optimization.md) |
+| 05.6 | [Transactions](weeks/05.6-transactions.md) |
+| 05.7 | [NoSQL Databases](weeks/05.7-nosql.md) |
+| 05.8 | [Data Modeling](weeks/05.8-data-modeling.md) |
+| 05.9 | [Data Warehouses & Lakes](weeks/05.9-warehouses-lakes.md) |
+| 05.10 | [ETL & ELT](weeks/05.10-etl-elt.md) |
+| 05.11 | [Data Pipelines](weeks/05.11-data-pipelines.md) |
+| 05.12 | [AI Data Workflows](weeks/05.12-ai-data-workflows.md) |
+| 05.13 | [Database Security](weeks/05.13-database-security.md) |
+| 05.14 | [Performance & Scaling](weeks/05.14-performance-scaling.md) |
+| 05.15 | [Vector Database Preview](weeks/05.15-vector-databases.md) |
+| 05.16 | [Projects & Summary](weeks/05.16-projects-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/databases-cheatsheet.md)
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:

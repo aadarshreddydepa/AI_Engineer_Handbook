@@ -9,8 +9,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 05 · SQL — lesson content
+- Module 06 · Mathematics — lesson content
 - Weekly lessons authored module by module
+
+---
+
+## [0.10.0] — 2026-07-09
+
+### Added
+- **Module 05 · Databases & Data Engineering for AI Engineers — complete.** (Authored in `docs/05-SQL/`; scope expanded well beyond SQL syntax to full data engineering, per the module brief.)
+  - 16 lessons (`docs/05-SQL/weeks/05.1`–`05.16`): introduction to databases (files vs DBs, the five guarantees), relational databases (keys, relationships, normalization/denormalization), SQL fundamentals (JOINs, aggregation, NULL logic, injection), advanced SQL (CTEs, window functions, views, triggers), query optimization (`EXPLAIN ANALYZE`, B-trees, composite/covering indexes, N+1), transactions (ACID, isolation levels, the lost update, deadlocks, MVCC), NoSQL (document/key-value/wide-column/graph, CAP), data modeling (ER diagrams, star/snowflake, facts/dimensions, SCD Type 2), warehouses & lakes (columnar storage, lakehouse, platform comparison), ETL & ELT (ingestion, validation, idempotency, Airflow), data pipelines (medallion layers, monitoring, lineage, data quality), AI data workflows (leakage, training/serving skew, drift, reproducibility), database security (RLS, encryption, PITR, LLM-generated SQL), performance & scaling (the scaling ladder), a vector-database preview (embeddings, ANN/HNSW, pgvector), and a projects+summary consolidation lesson.
+  - Companion artifacts: consolidated [exercises](docs/05-SQL/exercises/README.md) (SQL/design/optimization/modeling/debugging, difficulty-ramped), a 30-question [quiz](docs/05-SQL/quizzes/quiz-01.md) with model [answers](docs/05-SQL/quizzes/answers-01.md), a full [flashcard deck](docs/05-SQL/flashcards/deck.md), and a [master cheat sheet](docs/05-SQL/cheat-sheets/databases-cheatsheet.md).
+  - Six mini-projects: inventory database, employee management system, analytics dashboard backend, ETL/ELT pipeline, data warehouse design, and the flagship **AI dataset pipeline** (idempotent content-hash embedding → pgvector with tenant-aware retrieval).
+  - Module [lesson index](docs/05-SQL/weeks/README.md); linked from the module README.
+- Glossary: added a "Databases & Data Engineering (Module 05)" section (~40 terms: normalization, window function, execution plan, ACID, MVCC, CAP, star schema, SCD Type 2, lakehouse, ETL/ELT, idempotency, lineage, data leakage, drift, RLS, PITR, sharding, embedding, ANN/HNSW, pgvector, and more).
+
+### Notes
+- PostgreSQL-first throughout; taught from first principles at production depth with a continuous AI thread (credit-deduction races, label-distribution queries, idempotent/paid embedding pipelines, point-in-time correctness, LLM-generated SQL as untrusted input, permission-aware RAG retrieval). Ends by previewing vector databases as the bridge to Module 13 · RAG.
+- **Milestone:** completes the engineering-foundations phase (Modules 00–05). The handbook now pivots to the ML journey from Module 06.
 
 ---
 

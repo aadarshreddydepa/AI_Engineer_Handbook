@@ -244,3 +244,47 @@
 | **Git hook / pre-commit** | Scripts Git runs on events; the `pre-commit` framework runs shared checks before each commit. |
 | **GitHub Actions / CI/CD** | GitHub's automation for running tests/lint on every push and deploying passing code. |
 | **`git bisect`** | A binary search through history to find the commit that introduced a bug. |
+
+## Databases & Data Engineering (Module 05)
+
+| Term | Definition |
+|---|---|
+| **DBMS** | The software that stores, retrieves, and manages a database (e.g., PostgreSQL). |
+| **Schema** | The structure and rules (tables, columns, types, constraints) data must follow. |
+| **Primary / foreign key** | A row's unique identifier / a column referencing another table's PK, enforcing referential integrity. |
+| **Normalization (3NF)** | Organizing tables so each fact is stored once, eliminating update/insert/delete anomalies. |
+| **Denormalization** | Deliberately duplicating data to reduce JOINs and speed up reads (routine in analytics). |
+| **JOIN (inner / left / anti)** | Combining tables: inner keeps only matches; left keeps all left rows; anti-join finds rows with no match. |
+| **CTE** | A named subquery (`WITH`) making complex SQL readable and composable. |
+| **Window function** | Computes a value per row over a window of related rows without collapsing them (ranking, running totals). |
+| **Materialized view** | A stored, precomputed query result — a cache inside the database that must be refreshed. |
+| **Execution plan** | The database's chosen strategy for a query, inspected with `EXPLAIN ANALYZE`. |
+| **B-tree index** | The default balanced-tree index giving O(log n) lookups plus range and sort support. |
+| **Composite / covering index** | An index on multiple columns (leftmost-prefix rule) / one containing all columns a query needs (index-only scan). |
+| **ACID** | Atomicity, Consistency, Isolation, Durability — the transaction guarantees. |
+| **Isolation level** | How much concurrent transactions may see of each other (Read Committed, Serializable, …). |
+| **Lost update** | A race where two transactions read-modify-write and one overwrites the other. |
+| **MVCC** | Multi-Version Concurrency Control — row versions so readers don't block writers. |
+| **CAP theorem** | During a network partition, a distributed system must choose consistency or availability. |
+| **OLTP / OLAP** | Transactional (application, normalized) vs analytical (warehouse, denormalized) workloads. |
+| **Star schema** | An analytical model: a central fact table (measures + FKs) surrounded by denormalized dimensions. |
+| **Fact / dimension table** | Events and measurements / descriptive context (who, what, when). |
+| **SCD Type 2** | A slowly changing dimension that inserts a new row with valid_from/valid_to instead of overwriting. |
+| **Data warehouse / lake / lakehouse** | Structured modeled analytics / raw cheap any-format storage / warehouse features on lake storage. |
+| **Columnar storage** | Storing each column contiguously so analytical scans read only needed columns. |
+| **ETL / ELT** | Transform-then-load vs load-raw-then-transform (the modern default). |
+| **Idempotency** | Running an operation twice has the same effect as once — required for safe retries and backfills. |
+| **Data lineage** | The record of where each table/column came from — used for debugging and blast-radius analysis. |
+| **Data quality checks** | Assertions (nulls, uniqueness, ranges, freshness, volume) that block publication of bad data. |
+| **Data leakage** | Information unavailable at prediction time entering training — inflates offline scores, fails in production. |
+| **Training/serving skew** | Features computed differently at training vs serving, so the model sees unfamiliar inputs. |
+| **Data drift** | The real-world input distribution changing over time, causing models to decay. |
+| **Feature store** | A system providing one feature definition for both training (offline) and serving (online). |
+| **Row-Level Security (RLS)** | Database policies that automatically filter every query (e.g., by tenant) — enforcing isolation. |
+| **PITR** | Point-in-time recovery — restoring a database to any moment using backups plus the WAL. |
+| **Connection pooling** | Reusing a bounded set of database connections (e.g., PgBouncer) instead of one per request. |
+| **Read replica** | A read-only copy of the primary used to scale reads (with replication lag). |
+| **Partitioning / sharding** | Splitting a table within one database / splitting data across machines (breaks cross-shard JOINs). |
+| **Embedding** | A dense vector representing meaning, so semantically similar text lands nearby. |
+| **ANN / HNSW** | Approximate nearest-neighbor search / the dominant graph-based ANN index. |
+| **Vector database / pgvector** | A store for embeddings with similarity search / the Postgres extension providing it. |
