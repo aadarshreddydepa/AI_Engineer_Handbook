@@ -17,6 +17,31 @@ This module covers **Mathematics**. The math that powers ML — built from intui
 - Probability and statistics
 - Optimization intuition
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md). **Run every NumPy snippet** — mathematics becomes real when you *see* the matrix rotate the vector.
+
+| # | Lesson |
+|---|---|
+| 06.1 | [Mathematical Thinking](weeks/06.1-mathematical-thinking.md) |
+| 06.2 | [Linear Algebra I — Vectors & Matrices](weeks/06.2-linear-algebra-vectors-matrices.md) |
+| 06.3 | [Linear Algebra II — Structure & Decomposition](weeks/06.3-linear-algebra-decomposition.md) |
+| 06.4 | [Calculus & Gradients](weeks/06.4-calculus.md) |
+| 06.5 | [Probability](weeks/06.5-probability.md) |
+| 06.6 | [Statistics](weeks/06.6-statistics.md) |
+| 06.7 | [Optimization](weeks/06.7-optimization.md) |
+| 06.8 | [Information Theory](weeks/06.8-information-theory.md) |
+| 06.9 | [Numerical Computing](weeks/06.9-numerical-computing.md) |
+| 06.10 | [Mathematics of Neural Networks](weeks/06.10-neural-network-math.md) |
+| 06.11 | [Mathematics Behind Transformers](weeks/06.11-transformer-math.md) |
+| 06.12 | [Reading Mathematical Notation](weeks/06.12-reading-notation.md) |
+| 06.13 | [Projects & Summary](weeks/06.13-projects-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/math-cheatsheet.md)
+
+> [!IMPORTANT]
+> **You need far less math than you fear — but you need to *understand* it, not memorize it.** Four ideas carry most of practical AI: the **dot product** (similarity), the **gradient** (direction of steepest increase), the **probability distribution** (uncertainty), and **cross-entropy** (how wrong a predicted distribution is). This module is engineered to give you exactly those, deeply — and then show you that attention, LoRA, Adam, and backprop are all built from them.
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:

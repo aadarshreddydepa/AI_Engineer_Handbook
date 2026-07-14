@@ -9,8 +9,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ### Planned
-- Module 06 · Mathematics — lesson content
+- Module 07 · Data Analysis — lesson content
 - Weekly lessons authored module by module
+
+---
+
+## [0.11.0] — 2026-07-14
+
+### Added
+- **Module 06 · Mathematics for AI Engineers — complete.** (Authored in `docs/06-Mathematics/`. Taught from the perspective of *building AI systems*, not as a university course: every concept must answer why it exists, why an AI Engineer should care, where it's used, how it's implemented, and how it relates to ML, deep learning, and Transformers.)
+  - 13 lessons (`docs/06-Mathematics/weeks/06.1`–`06.13`): mathematical thinking (a 7-step equation-decoding procedure; the four ideas that carry most of AI), linear algebra I (scalars/vectors/matrices/tensors, the dot product as **alignment**, cosine similarity, matmul as **function composition**, the cross product and why AI ignores it), linear algebra II (transpose, inverse, rank, determinant, eigenvalues, **SVD**, PCA, and **LoRA as a rank argument**), calculus (limits, derivatives, partials, gradients, the **chain rule = backpropagation**, Jacobian, Hessian, a 50-line micro-autograd), probability (random variables, distributions, conditional probability, **Bayes and the base-rate fallacy**, independence, the chain rule of probability as the definition of an autoregressive LLM, temperature/top-k/top-p), statistics (mean vs median vs percentiles, variance, correlation, **bootstrap confidence intervals**, hypothesis testing, p-hacking), optimization (loss functions, convexity, batch/SGD/mini-batch, momentum, AdaGrad/RMSProp, **Adam and AdamW**, LR schedules and warmup), information theory (information as surprise, entropy, the **derivation of cross-entropy**, KL divergence, mutual information, perplexity), numerical computing (floats, **bfloat16 vs float16**, overflow/underflow, the three stability tricks, vectorization, broadcasting, systematic NaN debugging), the mathematics of neural networks (forward pass, activations, a full **backpropagation derivation**, weight updates, a complete NumPy network with gradient checking), the mathematics of Transformers (embeddings, attention decoded symbol by symbol, **the √d_k variance argument**, multi-head attention, causal masking, sinusoidal PE and **RoPE**, the O(n²) bottleneck), reading mathematical notation (sigma/product notation, typography as a type system, the ML symbol table, the three-pass paper-reading method, a live decoding of the LoRA paper), and a projects + module-summary consolidation lesson.
+  - Companion artifacts: consolidated [exercises](docs/06-Mathematics/exercises/README.md) (conceptual, intuition, NumPy, visualization, equation-interpretation, plus **cross-lesson exercises** that force topics to fuse), a 30-question [quiz](docs/06-Mathematics/quizzes/quiz-01.md) with model [answers](docs/06-Mathematics/quizzes/answers-01.md), a ~90-card [flashcard deck](docs/06-Mathematics/flashcards/deck.md), and a [master cheat sheet](docs/06-Mathematics/cheat-sheets/math-cheatsheet.md).
+  - Five mini-projects: matrix calculator & transformation visualizer, linear regression from scratch, gradient descent visualizer (optimizer zoo), PCA & compression lab, and the flagship **neural network mathematics simulator** — culminating in a from-scratch multi-head causal attention and a generating tiny Transformer, with **no frameworks at any step**.
+  - Module [lesson index](docs/06-Mathematics/weeks/README.md); linked from the module README.
+- Glossary: added a "Mathematics for AI Engineers (Module 06)" section (~90 terms across linear algebra, calculus/optimization, probability/statistics/information theory, numerical computing, and neural networks/Transformers).
+
+### Notes
+- **Intuition first, implementation second, formal mathematics third** — per the module brief. Proofs are omitted unless they carry intuition; every concept has a geometric picture, a NumPy implementation, and a named place where it appears in production AI.
+- Concepts deliberately recur across lessons so they fuse: the ravine `x² + 10y²` appears in 06.4 (gradient descent zig-zags), 06.3 (its Hessian's condition number *predicts* that zig-zag), and 06.7 (momentum fixes it); the `√d_k` in attention is shown to be a *variance* fix (06.5) protecting a *gradient* (06.4) from a *numerical* saturation (06.9); residual connections are traced from a derivative through eigenvalue compounding to the Transformer block.
+- Image placeholders are described in-place (vector geometry, matrix transformations, rank collapse, SVD geometry, the loss landscape, distributions, entropy, broadcasting, activations and their derivatives, attention heatmaps, positional encoding) — no images are generated.
 
 ---
 

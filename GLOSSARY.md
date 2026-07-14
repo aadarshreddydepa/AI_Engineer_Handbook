@@ -288,3 +288,114 @@
 | **Embedding** | A dense vector representing meaning, so semantically similar text lands nearby. |
 | **ANN / HNSW** | Approximate nearest-neighbor search / the dominant graph-based ANN index. |
 | **Vector database / pgvector** | A store for embeddings with similarity search / the Postgres extension providing it. |
+
+---
+
+## Mathematics for AI Engineers (Module 06)
+
+### Linear algebra
+
+| Term | Meaning |
+|---|---|
+| **Scalar / vector / matrix / tensor** | Rank 0/1/2/n arrays. In deep learning, "tensor" simply means an n-dimensional array. |
+| **Dot product** | `Σ xᵢyᵢ` — measures **alignment** between two vectors. The atomic operation of AI. |
+| **Cosine similarity** | The dot product with magnitude divided out — pure direction. The basis of semantic search. |
+| **Matrix multiplication** | `(m,k)@(k,n)→(m,n)`. Represents **function composition**; >90% of a Transformer's FLOPs. |
+| **Hadamard product (⊙)** | Element-wise multiplication (`*` in NumPy) — **not** matmul. |
+| **Transpose** | Flipping rows and columns. `XᵀX` is the (unscaled) feature covariance matrix. |
+| **Rank** | The number of dimensions a matrix's output actually uses — its real information content. |
+| **Low-rank hypothesis** | Real matrices (and fine-tuning updates) use far fewer dimensions than their shape suggests. |
+| **Determinant** | The factor by which a matrix scales volume. Zero ⟹ space collapsed ⟹ not invertible. |
+| **Singular matrix** | det=0 / rank-deficient / zero eigenvalue / zero singular value / not invertible — all one picture. |
+| **Eigenvector / eigenvalue** | A direction a matrix doesn't rotate (`Av = λv`) and its stretch factor. |
+| **SVD** | `A = UΣVᵀ` — every matrix is rotate → stretch → rotate. The master decomposition. |
+| **Eckart–Young theorem** | Truncating the SVD gives the *provably best* rank-k approximation. Underpins PCA and compression. |
+| **PCA** | Center the data, take the SVD, keep the top-k directions of variance. |
+| **Condition number** | σmax/σmin — how much a matrix amplifies numerical error. |
+| **LoRA** | `W + BA` with rank r ≪ d — fine-tune with ~256× fewer trainable parameters. |
+
+### Calculus & optimization
+
+| Term | Meaning |
+|---|---|
+| **Derivative** | A **sensitivity**: how much the output changes when you nudge the input. |
+| **Gradient (∇)** | The vector of partial derivatives — points in the direction of **steepest ascent**. |
+| **Chain rule** | Sensitivities multiply along a chain. **This is backpropagation.** |
+| **Backpropagation** | The chain rule applied right-to-left with cached activations — all gradients in one pass. |
+| **Reverse-mode autodiff** | Why training is feasible: one backward pass for *all* parameters, not one per parameter. |
+| **Jacobian / Hessian** | First derivatives of a vector function `(m,n)` / second derivatives of a scalar `(n,n)` (curvature). |
+| **Vanishing / exploding gradients** | Per-layer factors compounding: 0.25ⁿ → 0, or 1.5ⁿ → ∞. |
+| **Residual connection** | `x + f(x)` — its derivative is `1 + f′(x)`, a gradient highway that makes depth trainable. |
+| **Saddle point** | A critical point that's up in some directions, down in others. The real obstacle in high dimensions. |
+| **Gradient descent** | `θ ← θ − η∇L`. All of deep learning is this line. |
+| **Learning rate (η)** | The step size — **the single most important hyperparameter**. Stability needs η < 2/λmax(H). |
+| **Mini-batch SGD** | Estimate the gradient from a batch. Its **noise is a regularizer** that finds flat minima. |
+| **Momentum** | Accumulate a velocity — kills ravine zig-zag, powers through plateaus and saddles. |
+| **RMSProp / AdaGrad** | Per-parameter learning rates from an EMA (or sum) of squared gradients. |
+| **Adam / AdamW** | Momentum + RMSProp + bias correction. AdamW decouples weight decay. **3× parameter memory.** |
+| **Warmup + cosine decay** | The standard LR schedule. Warmup exists because Adam's variance estimate is unreliable at step 0. |
+| **Convexity** | One global minimum, guaranteed convergence. **Neural networks are not convex** — and work anyway. |
+| **Bias–variance tradeoff** | Underfitting (train↑ val↑) vs overfitting (train↓ val↑). |
+
+### Probability, statistics & information
+
+| Term | Meaning |
+|---|---|
+| **PMF / PDF** | Probability mass (discrete) / density (continuous). A PDF can exceed 1 — only *areas* are probabilities. |
+| **Expectation 𝔼[·]** | The average, weighted by probability. In code: `.mean()`. |
+| **Conditional probability** | `P(A|B)` — "A given B." **An LLM computes P(next token \| previous tokens).** |
+| **Bayes' theorem** | `P(A|B) = P(B|A)P(A)/P(B)` — posterior = likelihood × prior / evidence. |
+| **Base-rate fallacy** | A 99%-accurate test for a rare event yields mostly false positives. Why accuracy lies on imbalanced data. |
+| **Marginalization** | Summing a joint distribution over a variable you don't care about — `.sum(axis=k)`. |
+| **Chain rule of probability** | `P(w₁..wT) = ∏ P(wt | w<t)` — **the definition of an autoregressive language model**. |
+| **i.i.d. assumption** | Independent and identically distributed. Violated by time series — random splits leak the future. |
+| **He / Xavier initialization** | Weight init variance chosen to keep activations alive through depth (He: `√(2/n_in)`). |
+| **Softmax / temperature** | Logits → probability distribution. Temperature sharpens (T<1) or flattens (T>1) it. |
+| **Top-k / top-p (nucleus)** | Truncate the distribution before sampling. Top-p **adapts to model confidence**; top-k doesn't. |
+| **Standard error** | `σ/√n` — **uncertainty shrinks as 1/√n**, so 4× the data halves your error bar. |
+| **Confidence interval** | `x̄ ± 1.96·SE`. Report one on every metric. |
+| **Bootstrap** | Resample → recompute → percentile. A CI for **any** metric, with no assumptions. |
+| **p-value** | `P(data | H₀)` — **not** the probability the hypothesis is true. |
+| **p-hacking** | Trying many variants and reporting the winner. 40 configs at α=0.05 → ~2 false wins by chance. |
+| **Entropy** | Average surprise: `−Σ p log p`. A free per-token confidence signal from any model. |
+| **Cross-entropy** | `−Σ p log q` — surprise using the wrong model. **The loss function of every classifier and LLM.** |
+| **KL divergence** | `CE − entropy` — the *extra* cost of being wrong. Asymmetric. RLHF's leash; VAEs' regularizer. |
+| **Perplexity** | `e^(cross-entropy)` — "effectively choosing among N tokens." Only comparable across identical tokenizers. |
+| **Mutual information** | How much one variable tells you about another — captures **any** dependence, not just linear. InfoNCE/CLIP maximize it. |
+
+### Numerical computing
+
+| Term | Meaning |
+|---|---|
+| **float32 / bfloat16 / float16** | bf16 keeps float32's 8-bit **exponent** (range) and sacrifices precision — **deep learning needs range**. |
+| **Machine epsilon** | The granularity of a float type (~1e-7 for float32). Why `0.1+0.2 != 0.3`. |
+| **Overflow / underflow** | `exp(1000)` → inf / a product of 100 probabilities → 0. The two roads to NaN. |
+| **Max-subtraction trick** | `z - z.max()` before softmax — mathematically a no-op, numerically essential. |
+| **Log-sum-exp** | `max(x) + log Σ exp(x − max(x))` — a stable way to compute `log Σ exp(x)`. |
+| **Log space** | `log ∏ p = Σ log p`. Every language model works here to avoid underflow. |
+| **Catastrophic cancellation** | Subtracting near-equal numbers destroys precision — the naive variance formula can go *negative*. |
+| **Vectorization** | Replacing Python loops with array ops. 100–1000× faster (SIMD, contiguity, threaded BLAS). |
+| **Broadcasting** | Virtually stretching arrays to matching shapes. Compare from the right; `(n,)` vs `(n,1)` is a silent bug. |
+| **keepdims** | Preserves the reduced axis so broadcasting aligns — prevents accidental outer operations. |
+
+### Neural networks & Transformers
+
+| Term | Meaning |
+|---|---|
+| **Forward / backward pass** | Compute the prediction and cache activations / compute all gradients via the chain rule. |
+| **Activation function** | The nonlinearity. **Without it, any depth of linear layers collapses to one layer.** |
+| **ReLU / GELU / SiLU** | ReLU's derivative is 1 (gradients survive depth). GELU/SiLU are smooth — no dead neurons. Used by Transformers. |
+| **Dying ReLU** | A neuron stuck negative has gradient exactly 0 forever — it can never recover. |
+| **Universal approximation** | An MLP can approximate any continuous function — true, and says nothing about *learnability*. |
+| **Attention** | A **soft, differentiable dictionary lookup**: `softmax(QKᵀ/√dk)V`. |
+| **Q / K / V** | Query ("what I want"), Key ("what I offer"), Value ("what I contribute") — all projections of the same input. |
+| **√dk scaling** | Var(q·k) = dk; unscaled scores saturate the softmax and kill its gradient. A **variance fix**. |
+| **Causal mask** | Lower-triangular masking of future tokens. **The only architectural difference between GPT and BERT.** |
+| **Multi-head attention** | h heads at `dk = d/h` — many relationship-detectors for the FLOPs of one. Free. |
+| **Positional encoding** | Mandatory, because attention is **permutation-invariant** — the price of trading sequentiality for parallelism. |
+| **RoPE** | Rotate q,k by position so scores depend only on **relative** distance. Used by LLaMA/Mistral/Qwen. |
+| **Layer normalization** | Normalize each token's features to mean 0, std 1 — keeps activations (and gradients) in a sane range. |
+| **FFN** | The per-token MLP in a Transformer block (`d → 4d → d`). ~2/3 of all parameters; likely where facts are stored. |
+| **O(n²) attention** | The score matrix is n×n — doubling context quadruples cost. The reason "long context" is a research field. |
+| **FlashAttention** | **Identical math**, better memory access (tiling in SRAM). The bottleneck was memory traffic, not FLOPs. |
+| **KV cache** | Caching past keys/values at generation time — the dominant memory cost of LLM inference. |
