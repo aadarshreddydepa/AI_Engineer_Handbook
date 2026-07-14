@@ -497,3 +497,89 @@
 | **The skew test** | Batch-transform must equal single-row transform. Catches the **all-zeros scaler** disaster in production. |
 | **Group split** | Splitting by patient/photographer/product rather than randomly. **The #1 fix for medical-imaging leakage.** |
 | **The validation gap** | A hole between train and test equal to the forecast horizon — without it, test rows' rolling features use training data. |
+
+---
+
+## Machine Learning Foundations (Module 08)
+
+### Foundations
+
+| Term | Meaning |
+|---|---|
+| **Machine learning** | data + answers → **rules** (traditional programming is rules + data → answers). |
+| **The test for ML** | **"Can you write the rule?"** If yes, write the rule. ML is for rules too complex/fuzzy/changeable to state. |
+| **Supervised / unsupervised** | Learns from labeled `(X, y)` pairs / from the data's own structure. |
+| **Self-supervised** | ⭐ **The data labels itself** ("predict the next word"). Removed the label bottleneck; made LLMs possible. |
+| **The four boxes** | Every supervised algorithm = **model · loss · optimizer · predict**. "Learning" is just optimization. |
+| **Inductive bias** | **Every algorithm is a bet about the shape of your data.** The one whose bet matches reality wins. |
+| **Baseline** | "Predict the majority class / the mean." **A shocking number of production models don't beat it.** |
+| **Bias–variance tradeoff** | Error = bias² (too simple) + variance (too sensitive) + irreducible noise. |
+| **Underfit / overfit** | Train err high + val err high / train err low + val err high. **They need opposite fixes.** |
+| **Learning curve** | Train/val error vs training-set size. **Answers "would more data help?"** — flat val curve = no. |
+| **⭐ Error analysis** | **Look at 100 misclassified examples by hand.** Beats any amount of tuning; ~15% turn out to be mislabeled. |
+| **Regularization** | `loss + λ·complexity` — the same shape as **Ridge**, **tree pruning**, the **SVM margin**, and **Laplace smoothing**. |
+| **L1 vs L2** | L1's constraint diamond has **corners on the axes** → coefficients hit exactly **zero** → free feature selection. L2's circle doesn't. |
+
+### Algorithms
+
+| Term | Meaning |
+|---|---|
+| **Normal equations** | $w = (X^\top X)^{-1}X^\top y$. Exact but O(d³) and fragile. **Use `solve`, never `inv`.** |
+| **⭐ Ridge** | L2 regularization. $+\lambda I$ **adds λ to every eigenvalue** → $X^\top X + \lambda I$ is **always invertible**. |
+| **Lasso** | L1 — drives coefficients to exactly zero (feature selection), but arbitrarily picks one of a correlated pair. |
+| **Sigmoid / logit** | $\sigma(z)=1/(1+e^{-z})$; its inverse is the **log-odds**. Logistic regression assumes the log-odds are linear. |
+| **⭐ Odds ratio** | $e^{w_j}$ — *"smoking doubles your odds."* Why medicine and credit scoring still use logistic regression. |
+| **⭐ Log-loss** | Binary cross-entropy. Its gradient is $\frac{1}{n}X^\top(\hat p - y)$ — **identical to linear regression's**; the σ′ cancels. |
+| **Entropy / Gini** | $-\sum p\log p$ / $1-\sum p^2$ — measures of node impurity. **They pick the same splits ~98% of the time.** |
+| **Information gain** | $H(\text{parent}) - \sum\frac{n_k}{n}H(\text{child}_k)$ — the tree's splitting criterion. |
+| **Pruning** | Pre- (`max_depth`, `min_samples_leaf`) or post- (**cost-complexity**, $R(T)+\alpha|\text{leaves}|$). |
+| **Bootstrap / bagging** | Sample n rows **with replacement** (~63.2% in-bag). Train deep trees in parallel and **average** → **reduces variance**. |
+| **⭐ OOB score** | The ~36.8% left out of each bootstrap = **free cross-validation**, no extra fitting. |
+| **⭐⭐ The ensemble variance formula** | $\rho\sigma^2 + \frac{1-\rho}{M}\sigma^2$ — **the entire game is decorrelating the models (lowering ρ)**. |
+| **`max_features`** | ⭐ RF's key knob. **Deliberately handicapping each tree decorrelates the forest and makes it better.** |
+| **⭐ Gradient boosting** | Sequential **shallow** trees fitting the **residuals** — which **are the negative gradient**. It's **gradient descent in function space**. |
+| **Shrinkage** | The learning rate in boosting — the primary regularizer. **lr × n_estimators ≈ constant.** |
+| **Support vector** | A point **on or inside the SVM margin** — **the only points that determine the hyperplane.** |
+| **Hinge loss** | $\max(0, 1-y\cdot z)$ — **exactly zero past the margin** → zero gradient → **that's where the sparsity comes from**. |
+| **⭐⭐ Kernel trick** | The data appears **only in dot products**, so swap $x^\top x'$ for $K(x,x')$ → **infinite-dimensional power at O(d) cost**. |
+| **RBF kernel** | $\exp(-\gamma\|x-x'\|^2)$ — maps into an **infinite-dimensional** space. `gamma` = influence width. |
+| **The naive assumption** | Features are conditionally independent given the class. **Obviously false — works anyway**, because classification needs only the correct **ranking**. |
+| **Laplace smoothing** | Add α to every count — without it, **one unseen word gives P=0** and vetoes all other evidence. |
+| **⭐ Lazy learner** | KNN: O(1) training, **O(n·d) per query**. The training data **IS** the model. |
+| **⭐⭐ Curse of dimensionality** | As d grows, **all distances converge** — "nearest" stops meaning anything. Breaks KNN, K-Means, RBF-SVM, KD-trees. |
+| **Why RAG escapes it** | ⭐ **Learned embeddings live on a low-dimensional manifold** — the curse applies to *random* high-d data, not structured representations. |
+| **ANN / HNSW** | Approximate nearest neighbor — ~99% recall for a ~1000× speedup. **RAG = cosine-KNN + ANN.** |
+| **K-Means / Lloyd's algorithm** | Assign → update → repeat. **Converges, but not to the global optimum** (non-convex) → `n_init` + **k-means++**. |
+| **Silhouette / the elbow** | $(b-a)/\max(a,b)$ (has a real maximum) / inertia vs k (**always decreases — unreliable**). |
+| **⭐⭐ The null test** | **Shuffle the data, re-cluster, compare silhouettes.** If noise scores as well, **you found nothing.** |
+| **DBSCAN** | Density-based: **any shape, finds k itself, labels noise** (`-1`). **Fails with varying densities** → HDBSCAN. |
+| **PCA** | SVD of the **centered** data. Right singular vectors = the principal components. **Centering is mandatory.** |
+| **⭐ t-SNE's traps** | Cluster **sizes** meaningless · **distances between clusters** meaningless · **it invents clusters in noise** · **cannot `transform()` new points**. |
+
+### Evaluation, leakage & production
+
+| Term | Meaning |
+|---|---|
+| **Precision / recall** | *"When I say yes, am I right?"* / *"Did I find them all?"* **They trade off.** |
+| **⭐ Why accuracy lies** | On imbalanced data, predicting the majority class gets **99% while catching nothing**. |
+| **⭐⭐ ROC-AUC vs PR-AUC** | ROC's **FPR denominator (FP+TN)** is dominated by the huge negative class → **optimistic**. **PR-AUC has no TN** → honest. Use it when positives < ~10%. |
+| **⭐⭐ Threshold tuning** | **0.5 is a default, not a decision.** Derive it from the **cost of FP vs FN**. **Free, and routinely beats every model improvement.** |
+| **Calibration** | *"Is a 0.8 prediction right 80% of the time?"* LR ✅ · **Naive Bayes ❌ wildly overconfident** · NNs ❌. |
+| **StratifiedKFold / GroupKFold / TimeSeriesSplit** | Preserve class ratios / **keep a group in one fold** / **train always precedes test, with a gap**. |
+| **⭐⭐ The four leaks that survive CV** | **(1) preprocessing outside the loop** · (2) **feature selection before CV** (→ 90% accuracy on noise) · (3) duplicates across folds · (4) **target leakage — which CV cannot catch**. |
+| **Nested CV** | Inner loop selects hyperparameters; outer loop estimates performance. **The naive best-CV score is optimistically biased.** |
+| **⭐ MDI bias** | `feature_importances_` is **biased toward high-cardinality features** (a random ID column ranks top-5) and **splits credit among correlated ones**. |
+| **⭐ Permutation importance** | Shuffle a feature, measure the damage — **on validation**. The one to trust. |
+| **⭐⭐ SHAP** | Shapley values — the **unique** attribution satisfying **efficiency, symmetry, dummy, additivity**. **A theorem, not a heuristic.** |
+| **⭐ SHAP's best use** | **Finding your own leaks.** A feature with 80% of the SHAP mass is a **bug report**. |
+| **PDP / ICE / ALE** | Partial dependence (**lies when features are correlated** — "8-bedroom studios") / per-individual curves / **the correct version**. |
+| **⭐ Fairness impossibility** | Demographic parity, equal opportunity, and equalized odds are **mathematically incompatible**. **Choose one deliberately.** |
+| **Proxy** | ⭐ **Removing `race` doesn't remove race** — zip code reconstructs it. It only removes your ability to **measure**. |
+| **⭐ Random > grid search** | **Most hyperparameters don't matter**, so a grid wastes its budget re-testing the same few values of the one that does. |
+| **Successive halving / Hyperband** | Start many configs on a small budget, kill the worst, promote the survivors. 3–10× faster. |
+| **⭐ Prefer the plateau** | A lone spike in CV score is luck; a **broad flat region** is a robust setting. |
+| **⭐⭐ Monitor the inputs** | Performance needs **labels**, which arrive **months** late. **Input drift (PSI) and the prediction distribution are LEADING indicators.** |
+| **The prediction-distribution canary** | ⭐ The cheapest, best drift signal — **no labels required**. |
+| **⭐⭐ The retraining gate** | Reject a new model if it's worse, if the data failed validation, or if behaviour shifted. **Automated retraining without a gate is automated self-destruction.** |
+| **Feedback loop** | The model's own recommendations become its training data → **it confirms its own beliefs**. |
+| **Shadow mode** | ⭐ Run the new model on real traffic, log what it *would* have done, **don't act on it.** Real evidence, zero risk. |

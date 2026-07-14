@@ -17,6 +17,40 @@ This module covers **Machine Learning**. Classical ML from first principles: mod
 - The bias–variance tradeoff
 - Evaluation, metrics, and error analysis
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md).
+
+| # | Lesson |
+|---|---|
+| 08.1 | [What Is Machine Learning?](weeks/08.1-what-is-ml.md) |
+| 08.2 | [The ML Workflow](weeks/08.2-ml-workflow.md) |
+| 08.3 | [Linear Regression](weeks/08.3-linear-regression.md) |
+| 08.4 | [Logistic Regression](weeks/08.4-logistic-regression.md) |
+| 08.5 | [Decision Trees](weeks/08.5-decision-trees.md) |
+| 08.6 | [Ensembles — Bagging & Boosting](weeks/08.6-ensembles.md) |
+| 08.7 | [Support Vector Machines](weeks/08.7-svm.md) |
+| 08.8 | [Naive Bayes](weeks/08.8-naive-bayes.md) |
+| 08.9 | [K-Nearest Neighbors](weeks/08.9-knn.md) |
+| 08.10 | [Clustering](weeks/08.10-clustering.md) |
+| 08.11 | [Dimensionality Reduction](weeks/08.11-dimensionality-reduction.md) |
+| 08.12 | [Model Evaluation](weeks/08.12-evaluation.md) |
+| 08.13 | [Cross-Validation & Leakage](weeks/08.13-cross-validation.md) |
+| 08.14 | [Feature Engineering for ML](weeks/08.14-feature-engineering.md) |
+| 08.15 | [Hyperparameter Tuning](weeks/08.15-hyperparameter-tuning.md) |
+| 08.16 | [Model Interpretability](weeks/08.16-interpretability.md) |
+| 08.17 | [Production ML](weeks/08.17-production-ml.md) |
+| 08.18 | [Projects & Summary](weeks/08.18-projects-summary.md) |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/ml-cheatsheet.md)
+
+> [!IMPORTANT]
+> **⭐ The rule of this module: from scratch first, library second.**
+>
+> `LinearRegression().fit(X, y)` is one line, and it teaches you **nothing**. You cannot debug what you cannot picture. So: **derive it → implement it in NumPy → verify against scikit-learn with `np.allclose` → then use the library forever.** That single assertion is the moment scikit-learn stops being magic.
+>
+> **And the sentence that carries the whole module: every algorithm is a bet about the shape of your data.** Linear regression bets on a straight line. KNN bets that near things are alike. Naive Bayes bets that features are independent. **The one whose bet matches reality wins — and that is the entirety of model selection.**
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:
