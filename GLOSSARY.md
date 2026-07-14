@@ -399,3 +399,101 @@
 | **O(n²) attention** | The score matrix is n×n — doubling context quadruples cost. The reason "long context" is a research field. |
 | **FlashAttention** | **Identical math**, better memory access (tiling in SRAM). The bottleneck was memory traffic, not FLOPs. |
 | **KV cache** | Caching past keys/values at generation time — the dominant memory cost of LLM inference. |
+
+---
+
+## Data Analysis, Scientific Computing & Visualization (Module 07)
+
+### The lifecycle & its failures
+
+| Term | Meaning |
+|---|---|
+| **AI data lifecycle** | Raw → collection → validation → cleaning → transformation → features → storage → training → evaluation → deployment → monitoring → *(loop back)*. **It is a loop, not a line.** |
+| **Silent data bug** | A data failure that raises no exception — the model trains fine and is confidently wrong for months. The central problem of this module. |
+| **Data leakage** | Information available at training but **not at prediction time**. Dangerous because **it looks like success**. |
+| **Training/serving skew** | Features computed differently in production than in training (two diverging code paths). |
+| **Data / concept / label drift** | P(X) changes / P(y\|X) changes (the *relationship*) / P(y) changes. |
+| **Medallion (bronze/silver/gold)** | Raw-immutable → validated → ML-ready. **Never modify raw data.** |
+| **Data-centric AI** | Holding the model fixed and improving the data. Architectures commoditized; **nobody can download your data.** |
+| **Survivorship bias** | Building a training set from *current* entities, silently excluding everyone who already churned/failed/left. |
+
+### NumPy
+
+| Term | Meaning |
+|---|---|
+| **ndarray** | A header (dtype, shape, **strides**) over one contiguous C buffer. |
+| **Strides** | Bytes to step to advance one index along an axis. Why `a.T` copies zero data. |
+| **View vs copy** | Basic slicing/`.T`/`.reshape` return **views** (share memory — mutation propagates!); fancy and boolean indexing return **copies**. |
+| **Vectorization** | Replacing Python loops with array ops. 100–10,000× (no boxing, no dispatch, SIMD, cache locality, threaded BLAS). |
+| **Broadcasting** | Virtually stretching arrays to matching shapes. Compare from the right; equal or one is 1. |
+| **`keepdims=True`** | Preserves the reduced axis so broadcasting aligns — prevents a silent `(n,)` vs `(n,1)` outer operation. |
+| **Ufunc** | An element-wise compiled function with broadcasting built in. Use `out=` to avoid temporaries. |
+| **Structured array** | A NumPy array with named heterogeneous fields (a C struct). Rarely the right choice — use Pandas. |
+
+### Pandas
+
+| Term | Meaning |
+|---|---|
+| **DataFrame** | A **dict of columns** (each a NumPy array) sharing one **Index**. Columns are fast; rows are slow. |
+| **Index alignment** | Pandas aligns operations on **labels**, not position. A mismatched index yields **NaN, not an error**. |
+| **`SettingWithCopyWarning`** | Chained indexing (`df[mask]['c'] = x`) assigns to an ambiguous view-or-copy — **the assignment may silently do nothing**. Use one `.loc[rows, cols] = v`. |
+| **`category` dtype** | Stores unique values once + an integer code array. **10–50× memory reduction** on low-cardinality strings — the biggest win in Pandas. |
+| **Nullable `Int64`** | Integer dtype that supports missing values (NumPy's `int64` has no NaN, so a null upcasts the column to float). |
+| **Row explosion** | A many-to-many merge producing a **cartesian product** — every metric inflated, no error raised. |
+| **`validate=`** | Merge argument that **raises** if key-uniqueness is violated. Turns a silent row explosion into a loud exception. |
+| **Grain** | "One row per *what*?" — the question that prevents most join bugs. |
+| **`transform`** | GroupBy mode returning the **same shape as the input** — broadcasts a group statistic onto every row. **The feature-engineering workhorse.** |
+| **Long (tidy) vs wide** | One row per observation (for models and plots) vs one row per entity (for humans). |
+| **Window operations** | `.rolling()`, `.expanding()`, `.ewm()`, `.shift()` — where time-aware features are born, and where leakage sneaks in. |
+
+### Cleaning & EDA
+
+| Term | Meaning |
+|---|---|
+| **MCAR / MAR / MNAR** | Missing completely at random (impute freely) / depends on *other observed* columns (impute conditionally) / **depends on the missing value itself — never impute; the missingness IS the signal**. |
+| **The MNAR test** | Compare the **target rate** for rows where a column is missing vs present. If they differ, the missingness is predictive. |
+| **Missing-indicator flag** | A boolean `x_missing` column — often *more* predictive than the column it came from. |
+| **Disguised missingness / sentinel** | `-1`, `999`, `"N/A"` treated as real data — silently poisoning every statistic. Visible as a **spike in a histogram**, invisible in `describe()`. |
+| **IQR / MAD outlier detection** | Median-based and robust. Preferred over the **z-score**, which is inflated by the very outliers it hunts. |
+| **Winsorize / clip** | Capping extreme values instead of deleting the row. |
+| **`log1p`** | `log(1+x)` — fixes right-skew (income, prices, counts) and handles zeros. **The most useful transform in applied data science.** |
+| **Standardization / normalization / robust scaling** | `(x−μ)/σ` / `(x−min)/(max−min)` / `(x−median)/IQR`. **Fit on TRAIN only.** |
+| **Target encoding** | Replacing a category with its mean target. **Must be out-of-fold** — the naive version leaks the label. |
+| **Skewness / kurtosis** | Asymmetry / tail-heaviness. High kurtosis = extreme events are far more common than a normal predicts. |
+| **Multicollinearity** | Features correlated with **each other** (ρ > 0.95) — makes linear coefficients unstable and splits feature importances. |
+| **The leakage hunt** | Run *before* training: correlation > 0.9 with the target, single-feature AUC > 0.95, suspicious column names. |
+
+### Features & visualization
+
+| Term | Meaning |
+|---|---|
+| **Cyclical encoding** | `sin` **and** `cos` of a periodic feature, so hour 23 and hour 0 are adjacent. Both are needed — sine alone is ambiguous. |
+| **Interaction feature** | `a × b`. Trees find these automatically; **linear models cannot** — a key reason GBMs win on tabular data. |
+| **TF-IDF** | Term frequency × inverse document frequency — a word frequent *here* and rare *everywhere* is distinctive. A shockingly strong text baseline. |
+| **Permutation importance** | Shuffle a feature, measure the damage **on validation**. Trustworthy, unlike tree importances (biased to high cardinality; split credit among correlated features). |
+| **Overplotting** | A scatter with too many points becomes a blob. Fix with `alpha`, sampling, or **hexbin** (which shows density). |
+| **Diverging colormap** | `RdBu_r` centered at 0 — **required** for correlation, or −0.9 looks as "low" as 0.0. |
+| **k-anonymity** | Suppressing groups smaller than k (5–10) before publishing. **A group of size 1 IS that person's record.** |
+
+### Quality, scale & pipelines
+
+| Term | Meaning |
+|---|---|
+| **Six quality dimensions** | Completeness · Validity · **Accuracy** · Consistency · Timeliness · Uniqueness. |
+| **Accuracy (the hard one)** | Requires an **external reference** — data can pass every internal check and be completely wrong (prices in cents). Only **reconciliation** catches it. |
+| **Freshness / volume checks** | The two highest-value data tests. **A stale table looks perfectly healthy.** |
+| **Quarantine** | Isolating failing rows + alerting — **never silently "fixing" them**, which hides the incident. |
+| **PSI (Population Stability Index)** | A symmetrized KL divergence measuring drift. < 0.1 stable · 0.1–0.25 investigate · **> 0.25 retrain**. |
+| **Data lineage** | Where did this come from? What breaks if I change it (**blast radius**)? Who owns it? |
+| **Alert fatigue** | A check that fires daily gets muted — and then real incidents are invisible. **A wrong check is worse than no check.** |
+| **Columnar storage (Parquet)** | Column pruning + better compression + **predicate pushdown** → 5–100× faster than CSV. |
+| **Predicate pushdown** | Skipping whole row-groups using min/max statistics, without decompressing them. |
+| **Chunking** | Processing data larger than RAM in pieces. Works only for **decomposable** operations (not median, joins, or sort). |
+| **DuckDB** | SQL directly on Parquet files — no server, out-of-core, multi-threaded. **Most "we need Spark" is actually "we need DuckDB."** |
+| **`fit` / `transform` contract** | `fit` learns from train; `transform` only applies. Makes leakage **structurally impossible**, not merely inadvisable. |
+| **Manifest** | Per-run record: git SHA (+ **dirty flag**), input hash, config hash, seed, library versions. |
+| **Dataset versioning** | **Never overwrite.** Without it, *"did the code change or the data change?"* is unanswerable. |
+| **Pseudonymization at ingestion** | A separate `user_id → pseudonym` mapping table. **The only design that survives a GDPR deletion request** across immutable snapshots. |
+| **The skew test** | Batch-transform must equal single-row transform. Catches the **all-zeros scaler** disaster in production. |
+| **Group split** | Splitting by patient/photographer/product rather than randomly. **The #1 fix for medical-imaging leakage.** |
+| **The validation gap** | A hole between train and test equal to the forecast horizon — without it, test rows' rolling features use training data. |
