@@ -17,6 +17,40 @@ This module covers **Deep Learning**. Neural networks from the ground up with Py
 - Regularization, normalization, and initialization
 - Debugging and stabilizing neural networks
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md).
+
+| # | Lesson | Torch yet? |
+|---|---|---|
+| 09.1 | [Why Deep Learning?](weeks/09.1-why-deep-learning.md) | — |
+| 09.2 | [Neural Network Fundamentals](weeks/09.2-neural-network-fundamentals.md) | — |
+| 09.3 | [The Math of Neural Networks](weeks/09.3-math-of-neural-networks.md) | — |
+| 09.4 | [Backpropagation from Scratch](weeks/09.4-backpropagation.md) ⭐ | — |
+| 09.5 | [Optimization](weeks/09.5-optimization.md) | — |
+| 09.6 | [PyTorch Tensors](weeks/09.6-pytorch-tensors.md) | ✅ `import torch` |
+| 09.7 | [Autograd](weeks/09.7-autograd.md) | ✅ |
+| 09.8 | [Building Models with `nn.Module`](weeks/09.8-building-models.md) | ✅ |
+| 09.9 | [Data Loading](weeks/09.9-data-loading.md) | ✅ |
+| 09.10 | [The Training Loop](weeks/09.10-training-loop.md) ⭐ | ✅ |
+| 09.11 | [Convolutional Neural Networks](weeks/09.11-cnns.md) | ✅ |
+| 09.12 | [Sequence Models — RNN → LSTM → Transformer](weeks/09.12-sequence-models.md) | ✅ |
+| 09.13 | [Regularization & Normalization](weeks/09.13-regularization.md) | ✅ |
+| 09.14 | [Performance Optimization](weeks/09.14-performance.md) | ✅ |
+| 09.15 | [Model Debugging](weeks/09.15-debugging.md) | ✅ |
+| 09.16 | [Saving & Loading](weeks/09.16-saving-loading.md) | ✅ |
+| 09.17 | [Production](weeks/09.17-production.md) | ✅ |
+| 09.18 | [Projects & Summary](weeks/09.18-projects-summary.md) | ✅ |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/dl-cheatsheet.md)
+
+> [!IMPORTANT]
+> **⭐ The rule of this module: derive it by hand *before* you import the library.**
+>
+> Lessons 09.1–09.5 use **only Python and NumPy** — no `import torch`. You will hand-write a neuron, a layer, a forward pass, and — the load-bearing moment — **backpropagation**, gradient-checked against finite differences. Only at **09.6** does torch appear. Then, in 09.7, you rebuild that *exact same network* in PyTorch and prove with **`torch.allclose`** that `loss.backward()` computes the identical gradients you derived by hand. That assertion is the instant autograd stops being magic.
+>
+> **And the sentence that carries the whole module: deep learning added a new model, not a new discipline.** The training loop is always `zero_grad → backward → step`. Backprop is always the chain rule, cached. And the evaluation and MLOps you learned in [Module 08](../08-Machine-Learning/README.md) carry over **unchanged** — the network got deeper; the engineering did not.
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:

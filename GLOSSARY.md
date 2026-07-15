@@ -583,3 +583,130 @@
 | **⭐⭐ The retraining gate** | Reject a new model if it's worse, if the data failed validation, or if behaviour shifted. **Automated retraining without a gate is automated self-destruction.** |
 | **Feedback loop** | The model's own recommendations become its training data → **it confirms its own beliefs**. |
 | **Shadow mode** | ⭐ Run the new model on real traffic, log what it *would* have done, **don't act on it.** Real evidence, zero risk. |
+
+---
+
+## Deep Learning Systems with PyTorch (Module 09)
+
+### Foundations & neurons
+
+| Term | Meaning |
+|---|---|
+| **⭐ Representation learning** | The one thing deep learning changed: **the network learns the features itself**, layer by layer, instead of a human engineering them. |
+| **Feature hierarchy** | Early layers → edges/textures; middle → parts; late → objects. **Each layer makes the next one's job easier.** |
+| **Artificial neuron** | A **dot product + bias through a nonlinearity**: $\sigma(\mathbf{w}\cdot\mathbf{x}+b)$. **Its weights *are* the pattern it detects.** |
+| **⭐ A layer** | One **matmul + bias + elementwise activation**. Why >90% of a net's FLOPs are matmuls and why nets run on GPUs. |
+| **⭐ Why nonlinearity is mandatory** | Stacked Linear layers **collapse to one** ($W_2(W_1x+b_1)+b_2 = W'x+b'$). Without activations, 100 layers = logistic regression. |
+| **Affine transformation** | Linear map **+ a shift** ($Wx+b$). "Linear" / "dense" / "fully-connected" all name the same layer; the bias is the shift. |
+| **ReLU** | $\max(0,x)$. Derivative **exactly 1 when active** → nothing vanishes. Beat sigmoid for hidden layers for this reason. |
+| **Dying ReLU** | A neuron stuck negative → outputs 0 with **gradient 0 forever**. Fix: Leaky ReLU / GELU. |
+| **⭐ Universal approximation** | A big-enough net approximates any function — **but "enough" may be astronomical, and existence ≠ learnability ≠ generalization.** Depth (not width) makes it practical. |
+| **Where DL loses** | ⭐ **Tabular data** — gradient boosting still wins (faster, cheaper, interpretable). DL's home turf is **perception and language.** |
+| **Why 2012** | **Data (ImageNet) + compute (GPUs) + tricks (ReLU, dropout).** The ideas were from the 1980s; the fuel was new. |
+
+### The math, loss & backprop
+
+| Term | Meaning |
+|---|---|
+| **⭐ Loss takes logits** | `CrossEntropyLoss` fuses **softmax + log + NLL** for numerical stability. **Applying softmax yourself applies it twice** and wrecks training. |
+| **`BCEWithLogitsLoss`** | The binary equivalent (fuses sigmoid + BCE). Rule: **model outputs logits; the loss applies the final activation.** |
+| **⭐ The `ln(C)` sanity check** | An untrained C-class classifier's loss should be **≈ ln(C)** (2.30 for 10 classes). If not, there's a bug **before** training. |
+| **⭐ Backpropagation** | The **chain rule applied right-to-left, with forward activations cached**. Not a new algorithm — just the efficient ordering (reverse-mode autodiff). |
+| **Reverse mode** | One output (loss), millions of inputs (weights) → **all gradients in one backward pass.** Forward mode would need one pass per parameter. |
+| **⭐ The gradient of the fused loss** | `predicted − actual` — the same clean form seen in linear and logistic regression. |
+| **The four backward rules** | `Z=A@W` → `dW=A.T@dZ`, `dA=dZ@W.T`; `Z=A+b` → `db=dZ.sum(0)`; `A=f(Z)` → `dZ=dA*f'(Z)`; softmax+CE → `dZ=(p−y)/B`. |
+| **Shape-matching** | You derive *which* term is transposed because **`dW` must match `W`'s shape** — only one arrangement produces it. |
+| **⭐ Gradient checking** | Compare the analytical gradient to a **central finite difference** — the unit test for backprop. **Use float64; never during training.** |
+| **⭐ Vanishing / exploding gradient** | Chain rule multiplies per-layer derivatives → $\lambda^n$. Fixes: **ReLU, residual connections, normalization, careful init.** |
+| **Activation cache** | Every forward activation must be **kept until backprop consumes it** → training uses ~3–4× the memory of inference. |
+
+### Optimization
+
+| Term | Meaning |
+|---|---|
+| **Backprop vs optimizer** | **Backprop computes the gradient; the optimizer decides what to do with it.** Separate jobs. |
+| **Momentum** | EMA of the gradient (1st moment) — smooths the path, powers through ravines. |
+| **RMSProp** | EMA of the *squared* gradient (2nd moment) — gives **each parameter its own effective learning rate.** |
+| **⭐ Adam** | **Momentum + RMSProp + bias correction.** Twelve lines. It trained GPT. |
+| **⭐ AdamW** | Adam with **decoupled weight decay** (applied to the weights, not folded into the gradient). **The default for every modern model.** |
+| **⭐ Adam's 3× memory** | Stores **m and v — two extra copies of every parameter.** Why fine-tuning OOMs while inference fits; a core motivation for **LoRA**. |
+| **⭐ Learning rate** | **The #1 hyperparameter, by a wide margin.** A well-tuned SGD beats a badly-tuned Adam. |
+| **Warmup + cosine** | Small LR at first (Adam's 2nd-moment estimate is unreliable early), then decay. Standard for Transformers. |
+
+### PyTorch, autograd & models
+
+| Term | Meaning |
+|---|---|
+| **⭐ Tensor** | A NumPy array **+ a device (GPU) + an autograd tape.** Strip those two away and it's NumPy. |
+| **⭐ #1 runtime error** | *"Expected all tensors on the same device."* Fix: **move the model once at setup, every batch inside the loop** (`X.to(device)`). |
+| **`from_numpy` gotcha** | ⭐ **Shares memory** (no copy) — mutating the array mutates the tensor. Use `torch.tensor(a)` to copy. |
+| **bfloat16 vs float16** | bf16 keeps **float32's range** (won't overflow) and drops precision. **Why every LLM trains in bf16.** |
+| **⭐ `cuda.synchronize()`** | GPU ops are **asynchronous** — you must sync before timing, or you measure the *launch*, not the *work*. |
+| **⭐ Autograd** | Records ops on `requires_grad` tensors; `backward()` walks the graph applying the chain rule. **It's the `backward()` you hand-wrote, automated.** |
+| **⭐ Dynamic graph** | Built **fresh each forward pass, as the Python runs** → real `if`/`for`/`print`/`pdb` work inside the model. Why researchers adopted PyTorch. |
+| **⭐ `eval()` ≠ `no_grad()`** | `no_grad()` stops graph-building (memory); `model.eval()` switches dropout off + batchnorm to running stats (behaviour). **Need both at inference.** |
+| **⭐ The `.item()` leak** | Appending un-detached tensors (`losses.append(loss)`) keeps each whole graph alive → OOM. Fix: **`.item()`** or `.detach()`. |
+| **The ritual** | `optimizer.zero_grad()` → `loss.backward()` → `optimizer.step()`. |
+| **`nn.Module`** | `__init__` = the **parts list**; `forward` = the **wiring.** Assigning `self.fc = nn.Linear(...)` **auto-registers** its parameters. |
+| **⭐ `nn.ModuleList`** | Layers in a **plain Python list are invisible to `.parameters()`** — not trained, not moved. Use `ModuleList`. |
+| **`nn.Sequential`** | Straight-line stacks only; write a custom `forward` for branching / residuals / multiple inputs. |
+
+### Data & the training loop
+
+| Term | Meaning |
+|---|---|
+| **`Dataset` / `DataLoader`** | "one example given an index" / "batch, shuffle, load in parallel." |
+| **⭐ Shuffle train, not val** | Ordered train data → class-clustered batches → wrong gradients. Val does no updates, so shuffling only breaks reproducibility. |
+| **⭐ `num_workers`** | Parallel data loading. The **most expensive DL mistake is an idle GPU waiting for data** — diagnose with `nvidia-smi`. |
+| **Augment train, not val** | Random augmentation at eval makes metrics **non-deterministic** and evaluates on distorted data. |
+| **⭐ The three-line heartbeat** | `zero_grad → backward → step`. **Every model uses this exact loop — it never changes.** |
+| **⭐ `train()` / `eval()`** | Flip **both ways every epoch**: `train()` before training (dropout on), `eval()` + `no_grad()` before validation. Forgetting `eval()` = noisy metrics; forgetting `train()` after = silent overfitting. |
+| **⭐ Overfit one batch** | **Can the model drive a single batch to ~0 loss?** If not, the bug is in the model/loop, not the data. Karpathy's #1 recipe. |
+| **Best-by-validation checkpoint** | Save the best-val epoch (not the last, often overfit); **save the optimizer state too** to resume. |
+
+### Architectures
+
+| Term | Meaning |
+|---|---|
+| **⭐ Why FC fails on images** | Too many params (~150M/layer), ignores spatial structure, and — the killer — **no translation invariance** (relearns a pattern at every position). |
+| **⭐ Weight sharing** | The **same filter applied at every position** → translation invariance + orders-of-magnitude fewer parameters. |
+| **Convolution** | A **dot product between a learned filter and each image patch**, slid across the image → a feature map. |
+| **Feature map / NCHW** | A conv layer's output; PyTorch image tensors are shaped `(N, C, H, W)`. |
+| **⭐ Transfer learning** | Reuse a pretrained backbone's **generic early features**, train a new head → **thousands of images, not millions.** The default in vision. |
+| **ResNet / residual connection** | `x + f(x)` — a gradient highway that made 152-layer nets trainable. **In every model since, including Transformers.** |
+| **⭐ Why RNNs forget** | Vanishing gradient **across time** — BPTT multiplies the recurrent weights every step → dies after ~10 steps. The $\lambda^n$ problem, across time. |
+| **LSTM / GRU** | Gates + a **protected cell state** (a near-linear conveyor belt) → memory of hundreds of steps. |
+| **⭐ Why Transformers won** | RNNs are **sequential — can't parallelize** (waste the GPU) *and* struggle with long range. Attention fixes **both**: parallel + direct path between any two positions. |
+| **`pack_padded_sequence`** | ⭐ Tells the LSTM where each real sequence ends; without it, **padding contaminates the hidden state.** |
+
+### Regularization, performance & debugging
+
+| Term | Meaning |
+|---|---|
+| **The overfit diagnostic** | Unchanged from [08.2](docs/08-Machine-Learning/weeks/08.2-ml-workflow.md): **train low + val high → regularize; both high → do the opposite.** |
+| **⭐ Dropout** | Randomly zeroes neurons in training → prevents co-adaptation + implicit ensemble. **Off at inference** (`eval()`). |
+| **⭐ Batch norm (train vs eval)** | Train: current-batch stats (+ updates a running average). Eval: the **stored running average.** `eval()` switches it. |
+| **LayerNorm** | Normalizes **per example over features — batch-independent.** Why Transformers use it, not BatchNorm. |
+| **⭐ The strongest regularizer** | **More data — and augmentation is "more data" for free.** It expands the problem instead of constraining the model. |
+| **⭐ Mixed precision** | Half-precision matmuls on Tensor Cores + fp32 where it matters → **~2× faster, half the memory, ~free. Use by default.** |
+| **Gradient clipping** | `clip_grad_norm_(params, 1.0)` — the seatbelt against exploding gradients / NaN. |
+| **Gradient accumulation** | Sum gradients over several mini-batches, step once → **simulate a big batch that won't fit.** Why PyTorch accumulates. |
+| **Gradient checkpointing** | Discard activations in the forward pass, **recompute them in the backward** — trades ~30% compute for a big memory saving. |
+| **⭐ Data- vs compute-bound** | `nvidia-smi` GPU-Util: ~95% = compute-bound (optimize the model); low = **data-bound** (fix the DataLoader). **Check first.** |
+| **⭐ The #1 debug test** | **Overfit one batch.** Passing it rules out model/loop bugs and isolates the problem to data/regularization/hyperparameters. |
+| **Change one thing** | The cardinal debugging rule — and make the model prove it on something trivial before asking it to generalize. |
+| **NaN by timing** | Step 0 → data/loss/init; after a spike → **exploding gradients (clip)**; mid-training → overflow. `set_detect_anomaly(True)` finds the op. |
+| **Dead neuron** | ReLU stuck always-negative → outputs 0, gradient 0, never recovers. Fix: lower LR, Leaky ReLU/GELU. |
+
+### Save / load & production
+
+| Term | Meaning |
+|---|---|
+| **⭐ `state_dict`** | Save this, **not the whole model** — `torch.save(model, ...)` pickles the class path and breaks on refactor. `state_dict` is a portable dict of tensors. |
+| **⭐ Resuming training** | Needs model + **optimizer state** (Adam's m, v) + scheduler + epoch. **Weights alone → Adam restarts cold → loss spike.** |
+| **⭐ `torch.load` = RCE** | It's **pickle → arbitrary code execution.** Use **`weights_only=True`** or **safetensors** for untrusted files. |
+| **GPU reproducibility** | Not easily perfect (some GPU ops are non-deterministic). Best practice: **report mean ± std across seeds.** |
+| **⭐ Inference is lighter** | No gradients, no optimizer state, no activation cache → a 7B model trains in ~80 GB but **infers in ~14 GB.** |
+| **⭐ Latency vs throughput** | Batching helps **throughput** (efficient GPU) but hurts **latency** (requests wait to fill). **Dynamic batching** is the tunable middle. |
+| **TorchScript / ONNX** | Convert the model to a **static, Python-free graph** for deployment. **ONNX** = open, cross-framework. |
+| **⭐ MLOps unchanged** | Monitoring, drift canaries, versioning, retraining gates all carry over **unchanged from [Module 08](docs/08-Machine-Learning/weeks/08.17-production-ml.md).** **Deep learning added a new model, not a new discipline.** |
