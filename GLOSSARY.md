@@ -710,3 +710,102 @@
 | **⭐ Latency vs throughput** | Batching helps **throughput** (efficient GPU) but hurts **latency** (requests wait to fill). **Dynamic batching** is the tunable middle. |
 | **TorchScript / ONNX** | Convert the model to a **static, Python-free graph** for deployment. **ONNX** = open, cross-framework. |
 | **⭐ MLOps unchanged** | Monitoring, drift canaries, versioning, retraining gates all carry over **unchanged from [Module 08](docs/08-Machine-Learning/weeks/08.17-production-ml.md).** **Deep learning added a new model, not a new discipline.** |
+
+---
+
+## Natural Language Processing (Module 10)
+
+### Foundations & representation
+
+| Term | Meaning |
+|---|---|
+| **⭐ The one problem** | turn text into vectors **without losing meaning** — all of NLP is this. |
+| **⭐ Distributional hypothesis** | "know a word by the company it keeps" — meaning ≈ the distribution of contexts a word appears in. The field's bedrock. |
+| **Ambiguity** | one string, many meanings (lexical/syntactic/referential/scope) — the *default* in language. |
+| **Syntax / semantics / pragmatics** | grammar / literal meaning / intended meaning in context. |
+| **Zipf's law / long tail** | a few words dominate; the tail is near-infinite → you always meet unseen words at inference. |
+| **NFC normalization** | ⭐ collapse Unicode so "café" == "café"; the first line of every pipeline. |
+| **Tokenization** | split text into units; `.split()` is a trap (glues punctuation, shreds URLs). |
+| **Stemming vs lemmatization** | rule-based suffix chop (fast, non-words) vs dict+POS lookup (real base forms); both obsolete with neural models. |
+| **Stop words** | high-frequency low-info words; ⚠️ **never remove before sentiment or a sequence model** ("not"). |
+| **⭐ Subword tokenization (BPE/WordPiece)** | vocabulary of frequent character sequences → **no unknown words**, language-agnostic. The modern default. |
+
+### Sparse & dense representations
+
+| Term | Meaning |
+|---|---|
+| **One-hot** | 1 at the word's index, else 0; huge and **orthogonal (dot=0)** → meaning-blind. |
+| **Bag of Words** | word counts per document; **destroys word order** ("dog bites man" = "man bites dog"). |
+| **N-grams** | counts of short phrases; recover local order but explode the feature space (V², V³). |
+| **⭐ TF-IDF** | `count × log(N/df)`; ubiquitous words → ~0 weight, rare informative words → high. **Fit on train only.** |
+| **Why IDF's log** | document frequency spans orders of magnitude; the log compresses it so one rare word doesn't dominate. |
+| **⭐ Word embedding** | dense vector per word; **direction = meaning**; similar words are geometrically close. |
+| **Distributed representation** | meaning spread across all dims (vs one-hot's single coordinate) → generalizes across similar words. |
+| **⭐ Word2Vec** | shallow net on a fake task (predict context); keep the weight matrix, discard the predictions. |
+| **CBOW / skip-gram** | context→word (faster) / word→context (better on rare words; the usual default). |
+| **⭐ Negative sampling** | replace the V-way softmax with binary "real vs random pair?" → updates 1+k vectors, not V. |
+| **GloVe** | count-based cousin: factorize the global co-occurrence matrix so `wᵢ·wⱼ ≈ log(count)`. |
+| **Cosine similarity** | the embedding comparison — direction, not magnitude (which tracks frequency). |
+| **Analogy arithmetic** | `king − man + woman ≈ queen`; real but oversold/fragile in the wild. |
+| **⭐ Static-embedding limit** | one vector per word regardless of context ("bank" is one blur) → attention gives contextual ones. |
+
+### Sequence models & attention
+
+| Term | Meaning |
+|---|---|
+| **Hidden state** | a fixed-size running summary of the sequence read so far; how sequence models use word order. |
+| **⭐ Vanishing gradient (in NLP)** | λⁿ decay across time breaks long-range agreement/coreference after ~10 words. |
+| **LSTM / GRU** | gated **cell state** (near-linear memory path) → memory over hundreds of steps; GRU first. |
+| **Bidirectional** | forward+backward pass; sees the whole sentence — **forbidden for generation/streaming**. |
+| **⭐ Seq2seq bottleneck** | the encoder crushes the whole input into one fixed vector → fails on long inputs → attention fixes it. |
+| **⭐ Attention** | `softmax(QKᵀ/√dₖ)·V` — a soft, differentiable dictionary lookup; every token blends the whole sequence by relevance. |
+| **Query / Key / Value** | what a token seeks / how it's matched / what content it delivers (all learned projections). |
+| **⭐ √dₖ scaling** | variance fix: without it, dot-product scores grow, softmax saturates, and gradients vanish. |
+| **⭐ Self-attention** | Q,K,V from the same sequence → **contextual embeddings** ("bank" differs by sentence). |
+| **Cross-attention** | Q from one sequence, K/V from another (decoder attends to encoder). |
+| **Multi-head attention** | h parallel attentions → many relationship types (syntax, coreference) at ~the cost of one. |
+| **⭐ O(n²) cost** | attention is quadratic in sequence length — the central engineering problem of LLMs. |
+| **⭐ vs RNN** | attention has O(1) path length between tokens + full parallelism, at O(n²) compute. |
+
+### Seq2seq, tasks & evaluation
+
+| Term | Meaning |
+|---|---|
+| **Encoder–decoder** | understand the input → autoregressively generate the output one token at a time. |
+| **Teacher forcing** | train the decoder on the ground-truth previous token (fast, clean loss). |
+| **Exposure bias** | trained on perfect prefixes, tested on its own imperfect outputs → can derail. |
+| **Greedy / beam / sampling** | argmax (short-sighted) / keep k best (high-prob, bland) / random by distribution (LLM default). |
+| **⭐ The lineage** | seq2seq → +attention → **drop the RNN = Transformer**. |
+| **⭐ The four I/O shapes** | seq→label, seq→per-token, seq→seq, pair→score — the shape dictates head, loss, and metric. |
+| **BIO tagging** | Begin/Inside/Outside tags turning span-finding (NER) into per-token classification. |
+| **CRF** | ⭐ enforces globally consistent tag sequences (no illegal `O I-PER`) on top of a tagger. |
+| **Bi- vs cross-encoder** | encode separately & compare (fast, pre-computable) vs encode together (accurate, slow) → retrieve then rerank. |
+| **Macro vs micro F1** | per-class balanced (use for imbalance) vs pooled (frequent-class dominated). |
+| **BLEU** | n-gram **precision** vs reference + brevity penalty (translation); no semantics; relative only. |
+| **ROUGE** | n-gram **recall** vs reference (summarization coverage); no semantics. |
+| **⭐ Perplexity** | `exp(cross-entropy)` = effective choices per token; tokenizer-bound; measures fluency, not usefulness. |
+
+### Data, engineering & ethics
+
+| Term | Meaning |
+|---|---|
+| **⭐ The bottleneck** | labels, not the model — most NLP leverage is in the data. |
+| **⭐ Inter-annotator agreement (Cohen's κ)** | chance-corrected labeling consistency; the **ceiling** on achievable model accuracy. |
+| **Near-duplicate leakage** | the same/similar doc in train and test → score measures memorization; **dedup before splitting**. |
+| **Author/temporal leakage** | random splits let a model learn the author/period; split by author/source/time. |
+| **`<pad>` / `<unk>`** | fill short sequences / catch OOV words; both non-negotiable (long tail guarantees OOV). |
+| **`padding_idx`** | pins the pad embedding to zeros and excludes it from gradients. |
+| **⭐ Pad + pack/mask** | `pack_padded_sequence` (RNN), attention mask (attention), `ignore_index` (tagging) — else padding corrupts the model. |
+| **⭐ The loop is unchanged** | NLP adds a text front end (numericalize/embed/mask); the [09.10](docs/09-Deep-Learning/weeks/09.10-training-loop.md) loop itself doesn't change. |
+| **Hugging Face** | `tokenizers` + `transformers` + `datasets`; everything pretrained. |
+| **BERT / GPT / T5** | encoder (understand) / decoder (generate) / encoder–decoder (text-to-text). |
+| **⭐ Fine-tuning** | transfer learning for text: adapt a pretrained model with a small head on few labels. |
+| **⭐ Tokenizer must match model** | mismatched tokenizer → wrong IDs → garbage output, with **no crash**. |
+| **⭐ Train/serve skew** | the #1 NLP production bug: preprocessing must be byte-identical between training and serving. |
+| **Distillation** | smaller model (DistilBERT) ~2× faster for ~3% accuracy — the top latency lever. |
+| **NLP drift** | the **language itself** changes (slang/topics); monitor `<unk>`/vocabulary drift. |
+| **⭐ Bias (structural)** | co-occurrence learning encodes human prejudice as geometry; measure (WEAT/disaggregate), can't just clean away. |
+| **Proxy** | removing a protected attribute doesn't remove bias — name/style/school reconstruct it. |
+| **⭐ Memorization/extraction** | models regurgitate rare training sequences verbatim (PII); the only robust defense is not training on it. |
+| **⭐ Hallucination** | generation optimizes *probable*, not *true* — a fluent lie is high-probability; fight with RAG/citations/review. |
+| **Model card / datasheet** | document intended use, disaggregated performance, and known risks — accountability, increasingly legal. |
