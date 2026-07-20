@@ -17,6 +17,43 @@ This module covers **LLMs**. How large language models are trained, decode, and 
 - Context windows, positional encoding, KV cache
 - Model selection: capability, cost, licensing
 
+## 📖 Lessons (start here)
+
+> ✅ **This module's content is written.** Work through the lessons in order via the [lesson index](weeks/README.md).
+
+| # | Lesson | Build? |
+|---|---|---|
+| 11.1 | [What Is a Language Model?](weeks/11.1-what-is-a-language-model.md) | — |
+| 11.2 | [Tokenization](weeks/11.2-tokenization.md) | ✅ |
+| 11.3 | [Embeddings & Positional Encoding](weeks/11.3-embeddings-positional.md) | ✅ |
+| 11.4 | [Attention](weeks/11.4-attention.md) ⭐ | ✅ |
+| 11.5 | [Transformer Architecture](weeks/11.5-transformer-architecture.md) ⭐ | — |
+| 11.6 | [Decoder-Only Transformers](weeks/11.6-decoder-only.md) | ✅ |
+| 11.7 | [Encoder / Decoder / Encoder-Decoder](weeks/11.7-encoder-decoder-types.md) | — |
+| 11.8 | [Build a Mini Transformer](weeks/11.8-build-mini-transformer.md) ⭐⭐ | ✅ |
+| 11.9 | [Pretraining](weeks/11.9-pretraining.md) | — |
+| 11.10 | [Scaling Laws](weeks/11.10-scaling-laws.md) | — |
+| 11.11 | [Fine-Tuning](weeks/11.11-fine-tuning.md) | ✅ |
+| 11.12 | [Parameter-Efficient Fine-Tuning (LoRA/QLoRA)](weeks/11.12-peft-lora.md) ⭐ | ✅ |
+| 11.13 | [Alignment (RLHF, DPO)](weeks/11.13-alignment.md) | — |
+| 11.14 | [Inference & Decoding](weeks/11.14-inference-decoding.md) | ✅ |
+| 11.15 | [KV Cache](weeks/11.15-kv-cache.md) ⭐ | ✅ |
+| 11.16 | [Inference Optimization](weeks/11.16-inference-optimization.md) | — |
+| 11.17 | [LLM Evaluation](weeks/11.17-evaluation.md) | — |
+| 11.18 | [LLM Safety](weeks/11.18-safety.md) | — |
+| 11.19 | [APIs vs Open Models](weeks/11.19-apis-vs-open-models.md) | — |
+| 11.20 | [Production LLM Architecture](weeks/11.20-production-architecture.md) | — |
+| 11.21 | [Projects & Summary](weeks/11.21-projects-summary.md) | ✅ |
+
+**Companion artifacts:** [Exercises](exercises/README.md) · [Quiz](quizzes/quiz-01.md) · [Flashcards](flashcards/deck.md) · [Cheat sheet](cheat-sheets/llm-cheatsheet.md)
+
+> [!IMPORTANT]
+> **⭐ The rule of this module: an LLM is not a black box.** It is a stack of the self-attention blocks you built in [10.7](../10-NLP/weeks/10.7-attention.md), trained to **predict the next token**, scaled up, and aligned to be useful. Every capability — chat, reasoning, code — is an emergent side effect of getting very good at that one prediction.
+>
+> You will **build a working GPT from scratch** ([11.8](weeks/11.8-build-mini-transformer.md)) before relying on any library, then learn how real models are **pretrained** ([11.9](weeks/11.9-pretraining.md)), **scaled** ([11.10](weeks/11.10-scaling-laws.md)), **fine-tuned** ([11.11](weeks/11.11-fine-tuning.md)–[11.12](weeks/11.12-peft-lora.md)), **aligned** ([11.13](weeks/11.13-alignment.md)), and **served** ([11.14](weeks/11.14-inference-decoding.md)–[11.20](weeks/11.20-production-architecture.md)).
+>
+> **And the discipline that carries through: this module cashes in everything before it.** Attention, the [training loop](../09-Deep-Learning/weeks/09.10-training-loop.md), cross-entropy, the [rank argument behind LoRA](../06-Mathematics/weeks/06.3-linear-algebra-2.md), subword tokenization, sampling, and MLOps all came from earlier modules. **There is almost nothing new here — there is assembly, scale, and engineering.**
+
 ## How this module is organized
 
 Content is delivered week by week. Each module uses the same subfolders:

@@ -809,3 +809,98 @@
 | **⭐ Memorization/extraction** | models regurgitate rare training sequences verbatim (PII); the only robust defense is not training on it. |
 | **⭐ Hallucination** | generation optimizes *probable*, not *true* — a fluent lie is high-probability; fight with RAG/citations/review. |
 | **Model card / datasheet** | document intended use, disaggregated performance, and known risks — accountability, increasingly legal. |
+
+---
+
+## Large Language Models & Transformers (Module 11)
+
+### Foundations & architecture
+
+| Term | Meaning |
+|---|---|
+| **⭐ Language model** | a probability distribution over token sequences; concretely a next-token predictor `P(xₜ \| x_<t)`. |
+| **Chain rule (of probability)** | `P(seq) = ∏ P(xₜ \| x_<t)` — model the next token, model any sequence. |
+| **⭐ Everything is next-token prediction** | pretraining, generation, and fine-tuning are all this one objective. |
+| **Autoregressive** | each prediction is conditioned on the model's own previous outputs. |
+| **Causal vs masked LM** | left-to-right, generates (GPT) vs both-sided, understands but can't generate (BERT). |
+| **⭐ Emergence / in-context learning** | new abilities (reasoning, few-shot learning) appear at scale from the same objective. |
+| **⭐ Probable ≠ true** | hallucination is built into the objective — a fluent falsehood is high-probability. |
+| **Token** | the atomic unit an LLM reads, predicts, and is billed for. |
+| **⭐ BPE** | Byte-Pair Encoding: start from chars/bytes, repeatedly merge the most frequent pair. |
+| **Byte-level BPE** | base = 256 bytes → **no unknown token, ever**. |
+| **WordPiece / Unigram / SentencePiece** | merge-by-likelihood / prune-down / space-as-`▁` (multilingual, reversible). |
+| **⭐ Context length** | max tokens the model attends to; a hard limit (O(n²)). |
+| **⭐ Token efficiency** | tokens per text → cost, context budget, latency; unfair across languages (the "strawberry" problem). |
+| **Special / chat tokens** | `<bos>/<eos>/<pad>` + role tokens (`<\|user\|>`, `<\|assistant\|>`) — turn next-token prediction into chat. |
+| **Token embedding** | trainable `(vocab, d_model)` lookup; often **tied** with the output projection. |
+| **⭐ Why positional encoding** | self-attention is **permutation-invariant** — order must be explicitly added. |
+| **⭐ RoPE** | rotary positional embedding: rotates Q,K by position → attention depends on **relative distance**; extrapolates (long-context). |
+| **d_model** | model width; the residual-stream bandwidth per token. |
+
+### Attention & the Transformer block
+
+| Term | Meaning |
+|---|---|
+| **⭐ Attention** | `softmax(QKᵀ/√dₖ)·V` — the only place tokens exchange information. |
+| **Q / K / V** | what a token seeks / how it's matched / what content it delivers (learned projections). |
+| **⭐ √dₖ scaling** | variance fix; without it dot-product scores grow, softmax saturates, gradients vanish. |
+| **Multi-head attention** | h parallel heads (d_k=d_model/h) → many relationship types at ~the cost of one. |
+| **Causal mask** | future positions → −∞ before softmax → decoder / GPT. |
+| **⭐ MHA / GQA / MQA** | h / g / 1 key-value heads → shrinking the **KV cache**; GQA is the modern default. |
+| **FlashAttention** | exact attention that never materializes the (n×n) matrix — a memory-access rewrite. |
+| **⭐ O(n²)** | attention's cost in time and memory — the central LLM scaling wall. |
+| **⭐ Transformer block** | attention + FFN, each with a **residual connection + normalization**, repeated N times. |
+| **Feed-forward network (FFN)** | position-wise MLP, 4×d_model hidden; holds ~⅔ of params and most **factual knowledge**. |
+| **⭐ Residual stream** | a d_model-wide highway each sublayer *adds* to (never overwrites) → trainable depth. |
+| **LayerNorm / RMSNorm** | per-token scale stabilization; RMSNorm skips mean-centering (cheaper, Llama). |
+| **⭐ Pre-LN vs Post-LN** | norm before the sublayer (stable, modern) vs after the residual add (original, needs warmup). |
+| **Parameter count** | ≈ **12·N·d_model²** + embeddings. |
+| **⭐ Decoder-only won** | generation is a **universal interface** — any task is text-in/text-out. |
+| **Architecture families** | encoder-only (understand) / decoder-only (generate) / encoder-decoder (seq2seq). |
+| **⭐ Mini-GPT** | embed → N causal blocks → output projection → next-token loss; **an LLM is pure assembly**. |
+
+### Pretraining, scaling & adaptation
+
+| Term | Meaning |
+|---|---|
+| **Self-supervision** | the label is the next token → free labels → train on the whole web. |
+| **Base model** | a raw next-token predictor from pretraining; not yet a helpful assistant. |
+| **Deduplication** | ⭐ improves quality, cuts memorization, prevents benchmark contamination. |
+| **Distributed training** | data / tensor / pipeline parallelism + ZeRO/FSDP. |
+| **⭐ Memory is the constraint** | weights + grads + optimizer states + activations exceed one GPU. |
+| **⭐ Scaling law** | test loss falls as a power law in params/data/compute (straight line on log-log). |
+| **⭐ Chinchilla** | scale params and data roughly equally; **~20 tokens/param** compute-optimal. |
+| **Over-training** | small model + far more data → cheaper lifetime inference (deployment win). |
+| **⭐ SFT / instruction tuning** | fine-tune on prompt→response pairs → follows instructions; teaches **behavior**, not knowledge. |
+| **⭐ Loss masking** | set prompt-token labels to `-100`; train only on the response. |
+| **Catastrophic forgetting** | narrow/hard fine-tuning erodes general ability → low LR, few epochs, diverse data, or PEFT. |
+| **⭐ LoRA** | freeze W, train a low-rank update `ΔW = B·A` (~0.1% of params) — the [06.3](docs/06-Mathematics/weeks/06.3-linear-algebra-2.md) rank argument. |
+| **⭐ QLoRA** | LoRA on a 4-bit-quantized frozen base → fine-tune a 65B model on one GPU. |
+| **Adapters / prefix tuning** | inserted bottleneck MLPs / learned soft "virtual tokens" — other PEFT methods. |
+| **Alignment (HHH)** | make the model helpful, harmless, honest; the 3rd stage (pretrain → SFT → align). |
+| **⭐ RLHF** | reward model (imitates human preferences) + PPO to maximize it + KL penalty. |
+| **Reward hacking** | the policy games the imperfect reward model (sycophancy/verbosity) — Goodhart. |
+| **⭐ DPO** | Direct Preference Optimization — RL-free, one classification-style loss; stable, dominant. |
+
+### Inference, evaluation, safety & production
+
+| Term | Meaning |
+|---|---|
+| **Decoding** | greedy (facts) · **temperature** (creativity dial) · **top-p** (adaptive default) · beam (translation, not chat). |
+| **Temperature** | reshapes the distribution: low sharpens (focused), high flattens (creative, more hallucination). |
+| **⭐ KV cache** | store past tokens' keys/values so each new token does O(n), not O(n²), work. |
+| **⭐ Prefill vs decode** | process the prompt in one parallel pass (**compute-bound**) vs generate token-by-token from the cache (**memory-bound**). |
+| **⭐ KV-cache memory** | grows with batch × context; often limits concurrency more than the weights → GQA. |
+| **⭐ Quantization** | int8/int4 — the highest-leverage inference win (~4× memory/speed, ~1% quality); do first. |
+| **⭐ Continuous batching** | add/remove requests per token so the GPU never idles — the biggest throughput win (decode is memory-bound). |
+| **Speculative decoding** | a small draft model guesses; the big model verifies in parallel — 2–3× faster, identical output. |
+| **⭐ Evaluation ladder** | perplexity → task benchmarks → human/LLM-judge; no single number = "good". |
+| **Benchmark contamination** | test data in the training corpus → inflated scores without real capability. |
+| **LLM-as-judge** | scalable eval proxy with position/verbosity/self-preference bias. |
+| **⭐ Prompt injection** | instructions & data share one channel → the model can't separate them → **no complete fix**. |
+| **Jailbreak** | bypasses safety training (alignment is shallow/strippable). |
+| **⭐ Least privilege** | assume the model will be hijacked; limit what it can *do* — the best LLM defense. |
+| **API vs open vs self-hosted** | rent frontier / own model / own infra — decided mainly by **privacy** and **cost-at-scale**. |
+| **Cascade** | route easy queries to a cheap small model, escalate hard ones to a frontier model. |
+| **⭐ Semantic caching** | return a cached answer for an embedding-similar query — the biggest cost/latency win in production. |
+| **⭐ The production lesson** | the engineering is the **system around the model** (gateway, guardrails, cache, monitor); [08.17](docs/08-Machine-Learning/weeks/08.17-production-ml.md)/[10.13](docs/10-NLP/weeks/10.13-production.md) MLOps, unchanged. |
