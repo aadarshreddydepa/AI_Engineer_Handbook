@@ -905,6 +905,7 @@
 | **⭐ Semantic caching** | return a cached answer for an embedding-similar query — the biggest cost/latency win in production. |
 | **⭐ The production lesson** | the engineering is the **system around the model** (gateway, guardrails, cache, monitor); [08.17](docs/08-Machine-Learning/weeks/08.17-production-ml.md)/[10.13](docs/10-NLP/weeks/10.13-production.md) MLOps, unchanged. |
 
+
 ---
 
 ## Prompt Engineering (Module 12)
@@ -959,6 +960,7 @@
 | **Optimization** | move on the quality↔cost↔latency surface via evaluation; **output length** is often the biggest cost/latency lever. |
 | **⭐ Production prompt mgmt** | prompt = deployed artifact: registry · version · env-pin · log · **monitor quality (not uptime)** · rollback (re-pin) · canary A/B. |
 
+
 ---
 
 ## Retrieval-Augmented Generation (RAG) (Module 13)
@@ -967,34 +969,73 @@
 
 | Term | Meaning |
 |---|---|
-| **⭐ RAG** | retrieve relevant text → put it in the prompt → generate a grounded answer. |
+| **⭐ RAG** | retrieve relevant text → put it in the prompt → generate a grounded answer; recall becomes reading comprehension. |
 | **⭐ Why RAG** | LLM knowledge is **cut off · private-blind · stale · hallucination-prone** — RAG injects fresh/private/citable facts at query time. |
 | **Facts → RAG** | facts/knowledge → RAG · behavior/style → fine-tune · framing → prompt. |
-| **⭐ The RAG law** | **retrieval quality is the ceiling on generation quality**. |
+| **⭐ The RAG law** | **retrieval quality is the ceiling on generation quality** — the LLM can only be as right as its context. |
 | **⭐ The pipeline** | ingest → parse → clean → chunk → metadata → embed → index (offline) → retrieve → filter → rerank → context → generate (online) → eval + monitor. |
+| **Offline vs online** | index-time (once per doc, batched) vs query-time (every request, latency-bound); bugs baked offline surface online. |
 
 ### Index-time
 
 | Term | Meaning |
 |---|---|
-| **⭐ Parsing law** | parsing quality caps retrieval quality — a parse error is permanent. |
-| **⭐ Chunk** | the atom of RAG — you retrieve chunks, not documents; too big = blurred embedding, too small = severed context. |
-| **Chunking strategies** | fixed < sentence/paragraph < **recursive** < semantic < **structure-aware**; overlap 10–20%. |
-| **⭐ Embedding** | text → dense vector where similarity = closeness; **cosine** (default) == dot product if normalized. |
-| **⭐ Golden rule** | normalize + cosine + same model/metric everywhere; metric mismatch is the #1 bug. |
-| **⭐ ANN** | approximate nearest neighbor — examine ~1%, recover ~99% of neighbors (HNSW/IVF/PQ); recall ↔ speed ↔ memory. |
+| **⭐ Parsing law** | parsing quality caps retrieval quality — a parse error (mangled table, bad OCR) is permanent. |
+| **Table extraction** | preserve cell relationships (row-serialize / Markdown), never flow to text. |
+| **OCR** | pixels → text; imperfect → track confidence, flag low-confidence pages. |
+| **Metadata** | source/page/date/**ACL** captured at parse time — powers filtering, access control, citations. |
+| **⭐ Chunk** | the atom of RAG — you retrieve chunks, not documents; boundaries decide what's retrievable. |
+| **Blurred embedding** | a too-large chunk averages many ideas into one vector, matching everything weakly. |
+| **Chunking strategies** | fixed < sentence/paragraph < **recursive** < semantic < **structure-aware**. |
+| **Overlap** | repeat 10–20% of adjacent chunks so boundary-straddling facts survive; first dial to tune. |
+| **⭐ Embedding** | text → dense vector where semantic similarity = geometric closeness. |
+| **⭐ Cosine / dot / L2** | cosine (angle, text default) == dot product if **normalized**; L2 ranks the same when normalized. |
+| **⭐ Golden rule** | normalize + cosine + **same model/metric everywhere**; metric mismatch is the #1 bug. |
+| **Vector database** | stores embeddings + metadata, answers nearest-neighbor queries fast via ANN. |
+| **⭐ ANN** | approximate nearest neighbor — examine ~1% of vectors, recover ~99% of true neighbors. |
+| **HNSW / IVF / PQ** | graph walk / cluster-probe / lossy compression — the three ANN families. |
+| **⭐ ANN trade-off** | recall ↔ speed ↔ memory; tune to a measured recall target vs brute-force ground truth. |
 
-### Query-time & operations
+### Query-time
 
 | Term | Meaning |
 |---|---|
-| **⭐ Dense vs sparse** | dense (embeddings) matches meaning but misses codes; sparse (**BM25**) matches keywords but misses synonyms. |
-| **⭐ Hybrid search** | dense + sparse fused (**RRF**) — semantic recall + exact precision; the most reliable upgrade after chunking. |
-| **⭐ Retrieve vs rerank** | retrieval maximizes recall (top-N); **cross-encoder** reranking maximizes precision (top-k). |
-| **⭐ Lost-in-the-middle** | put best chunks at context edges; more ≠ better. |
-| **⭐ Escape hatch** | "if not in sources, say I don't know" — top anti-hallucination lever; surfaces retrieval failures. |
-| **⭐ Two evaluations** | retrieval (Precision@K, **Recall@K** — fatal if low, MRR, NDCG) + generation (**faithfulness**, answer/context relevance, citation accuracy). |
-| **⭐ Debug by tracing** | trace a query through every stage; first stage where info disappears is the bug. |
-| **⭐ Indirect injection** | malicious instructions in retrieved documents; defense = ACL pre-filter at retrieval + least privilege + data-as-data. |
-| **⭐ Two planes** | offline indexing (async) + online serving (sync); versioned index; monitor quality not just uptime. |
-| **⭐ Semantic caching** | serve a stored answer for an embedding-similar query — biggest latency/cost saver; scope by ACL, invalidate on update. |
+| **⭐ Dense vs sparse** | dense (embeddings) matches meaning but misses exact codes; sparse (**BM25**) matches keywords but misses synonyms. |
+| **BM25** | refined TF-IDF: IDF (rare=important) · TF saturation (k₁) · length norm (b). |
+| **⭐ Hybrid search** | run dense + sparse and **fuse** (RRF) — semantic recall + exact precision; the most reliable upgrade after chunking. |
+| **RRF** | Reciprocal Rank Fusion — combine retrievers by rank `1/(k+rank)`, no score normalization needed. |
+| **Metadata filtering** | scope by date/type/**ACL**; enforce access control at retrieval (pre-filter). |
+| **Query expansion / multi-query / HyDE** | fix vocabulary mismatch on the query side (cost: latency + noise). |
+| **⭐ Retrieve vs rerank** | retrieval maximizes recall (generous top-N); reranking maximizes precision (top-k). |
+| **Bi- vs cross-encoder** | encode query & chunk separately (fast) vs together with attention (precise, 1 pass/candidate). |
+| **⭐ Reranker** | cross-encoder that re-scores retrieved candidates; often the biggest quality jump. |
+| **⭐ Lost-in-the-middle** | LLMs use context start & end, ignore the middle (U-curve) → put best chunks at edges, keep k small. |
+| **More ≠ better context** | extra chunks add distractors and dilute attention → lower accuracy. |
+| **Dedup** | mandatory — overlap and multi-query create duplicate passages. |
+| **⭐ Escape hatch** | "if the answer isn't in the sources, say I don't know" — the top anti-hallucination lever; surfaces retrieval failures. |
+| **Grounding** | "answer ONLY from the sources; no prior knowledge." |
+| **Citation** | attribute each claim to [Source N]; **verify** — a cited source isn't a verified source. |
+| **Sources = data** | treat retrieved text as data, never instructions (injection defense). |
+
+### Advanced, evaluation & operations
+
+| Term | Meaning |
+|---|---|
+| **Parent-child (small-to-big)** | match small chunks (precise), return large parents (context). |
+| **Multi-hop / graph / agentic / corrective / self-reflective RAG** | advanced patterns, each fixing a specific naive-RAG failure; add only for a measured failure. |
+| **⭐ Two evaluations** | retrieval (Precision@K, **Recall@K**, MRR, NDCG) and generation (**faithfulness**, answer/context relevance, citation accuracy). |
+| **⭐ Recall@K** | fraction of relevant chunks in top-K — the **fatal** RAG retrieval metric (a miss is unrecoverable). |
+| **⭐ Faithfulness** | every answer claim is supported by the context — the anti-hallucination metric. |
+| **RAG triad** | context relevance (retrieval) + faithfulness (grounding) + answer relevance (helpfulness). |
+| **Unanswerable tests** | include out-of-corpus questions to measure correct declines. |
+| **⭐ Debug by tracing** | trace a query through every stage; the first stage where info disappears is the bug (symptom is last, cause upstream). |
+| **⭐ Indirect prompt injection** | malicious instructions in retrieved documents the LLM may obey — structural; best defense is **least privilege**. |
+| **Access control** | ACL/tenant **pre-filter at retrieval**, never after generation; isolate tenants by namespace/DB. |
+| **Document poisoning** | false/malicious corpus content served authoritatively → provenance, write controls, citations. |
+| **⭐ Two planes** | offline indexing (async, batched) + online serving (sync, latency-bound); share only state. |
+| **Versioned index** | re-embed + blue/green swap on model change; roll back with no downtime. |
+| **⭐ Monitor quality** | not just uptime — freshness, refusal rate, faithfulness; a healthy system can serve wrong answers. |
+| **⭐ Latency goes to generation** | LLM call dominates (80–95%), then rerank; retrieval/embed are small. |
+| **⭐ Semantic caching** | serve a stored answer for an embedding-similar past query — biggest latency/cost saver; scope by ACL, invalidate on update. |
+| **Right-size the model** | retrieval supplies the knowledge → a smaller/cheaper LLM often suffices. |
+| **Frameworks (LangChain/LlamaIndex/Haystack)** | pre-wire the pipeline; help for prototypes/connectors, **hide the quality knobs** (chunking, metric, retrieval, prompt). |
