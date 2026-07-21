@@ -1039,3 +1039,59 @@
 | **⭐ Semantic caching** | serve a stored answer for an embedding-similar past query — biggest latency/cost saver; scope by ACL, invalidate on update. |
 | **Right-size the model** | retrieval supplies the knowledge → a smaller/cheaper LLM often suffices. |
 | **Frameworks (LangChain/LlamaIndex/Haystack)** | pre-wire the pipeline; help for prototypes/connectors, **hide the quality knobs** (chunking, metric, retrieval, prompt). |
+
+---
+
+## AI Agents & MCP (Module 14)
+
+### The agent & its loop
+
+| Term | Meaning |
+|---|---|
+| **⭐ Agent** | an LLM running in a **loop** with tools, memory, and a goal — perceive → reason → plan → act → observe → reflect → repeat. |
+| **⭐ Core truth** | an agent is a **loop, not a prompt**: the model decides, the **code controls** (loop, budget, validation, memory, permissions). |
+| **vs workflow** | in a workflow the *developer* hardcodes steps; in an agent the *LLM* decides steps at runtime. |
+| **vs RAG** | RAG is one fixed retrieve→generate step; an agent chooses tools dynamically (RAG can be one tool). |
+| **ReAct** | reason → act (tool call) → observe → repeat — the default architecture. |
+| **Plan-and-execute** | plan all steps up front, then execute (re-plan as needed). |
+| **Structured decision** | the LLM returns `{thought, tool, args}` or `{finish, answer}`, never free text. |
+
+### Planning, tools, memory, reflection
+
+| Term | Meaning |
+|---|---|
+| **Planning** | decompose **goal → sub-goals → tasks → actions (tool calls) → results**, stopping at the tool level. |
+| **Sequential/dynamic/hierarchical** | plan up front (brittle) · plan each step (adaptive) · layered; trade-off = **commitment vs adaptivity**; default plan-and-execute with **re-planning**. |
+| **⭐ Tools** | the agent's capabilities — it can only *do* what a tool allows; pipeline = select → **validate** → execute (sandbox/timeout) → structured result. |
+| **⭐ Failures → observations** | tool errors become recoverable observations, never crashes — this is how agents recover. |
+| **Retries** | bounded backoff for *transient* failures only; not permanent (bad args/403). |
+| **⭐ Memory** | external system (LLM is stateless); window = **RAM**, stores = **disk**; types: working · long-term · **semantic** (facts) · **episodic** (past runs) · vector · conversation. |
+| **Memory lifecycle** | write → retrieve → **summarize** → prune → persist; summarize to survive long tasks. |
+| **Memory poisoning** | attacker writes malicious content to long-term memory to steer future runs — treat recall as untrusted; scope writes. |
+| **Reflection** | self-evaluate → detect error → correct → **verify** (grounded > self-critique); bound it; use before irreversible actions. |
+
+### Loops, multi-agent, MCP
+
+| Term | Meaning |
+|---|---|
+| **Loop types** | fixed (N steps) · **adaptive** (until goal/budget, default) · event-driven (on events, idle-cheap). |
+| **⭐ Termination** | goal · step budget · cost budget · **no-progress** · **oscillation** — enforced in **code**, never by the model; degrade gracefully. |
+| **Multi-agent** | specialized agents (coordinator/planner/worker/researcher/**critic**/executor); patterns: hierarchical/sequential/parallel/debate. |
+| **When multi-agent** | only for a concrete reason (too many tools / context overload / parallelism / review / expertise); default single-agent. |
+| **⭐ MCP** | Model Context Protocol — open standard connecting apps to tools/data; **"USB-C for AI"**; turns M×N integrations into M+N. |
+| **MCP host/client/server** | host = the AI app (LLM + clients); client = 1:1 link inside the host; server = exposes capabilities wrapping a service/data. |
+| **MCP primitives** | **resources** (app-controlled, read-only data by URI) · **tools** (model-controlled actions) · **prompts** (user-controlled templates). |
+| **MCP transport/lifecycle** | JSON-RPC over **stdio** (local) / **HTTP+SSE** (remote); initialize (capability negotiation) → operate → shutdown. **MCP = transport, not safety.** |
+
+### Context, comms, humans, safety, eval, production
+
+| Term | Meaning |
+|---|---|
+| **Agent context** | re-chosen **every step** and grows; use **dynamic assembly** + **rolling summarization** + externalized state; **re-state the goal** (anti-drift). |
+| **Agent communication** | structured, schema-validated messages (an API, not a chat); **aggregation ≠ concatenation**; messages are untrusted. |
+| **Human-in-the-loop** | pause for a human at high-stakes/irreversible/low-confidence moments (approval/checkpoint/override/escalation/feedback); calibrate by impact — the **last line of defense vs hijack**. |
+| **⭐ Least privilege** | the load-bearing agent-safety control — fewest/narrowest tools, read-only default; works regardless of *how* the agent is compromised. |
+| **⭐ Assume breach** | design so a fully hijacked agent has minimal blast radius; layer sandboxing, secret hygiene (never in context), rate limits, audit logs. |
+| **⭐ Agent evaluation** | top-line = **task success rate**; + component (tool/planning accuracy), efficiency (steps/latency/cost), reliability/safety; evaluate **outcome + trajectory**; sandboxed, end-state checks, adversarial cases. |
+| **⭐ Production agent** | service-oriented: gateway → orchestrator (loop+budgets+**durable/resumable state**) → planner/memory/retriever → **tool manager** (security choke point) → MCP → observability; **trace the full trajectory**, monitor success/cost not uptime. |
+| **Frameworks** | LangGraph (graphs/durable state) · CrewAI/AutoGen (multi-agent) · OpenAI Agents SDK/PydanticAI (lightweight/typed) · Semantic Kernel (enterprise); package the primitives but **hide the guardrails** — build by hand first, configure budgets/permissions explicitly. |
