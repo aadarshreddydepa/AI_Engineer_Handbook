@@ -904,3 +904,97 @@
 | **Cascade** | route easy queries to a cheap small model, escalate hard ones to a frontier model. |
 | **⭐ Semantic caching** | return a cached answer for an embedding-similar query — the biggest cost/latency win in production. |
 | **⭐ The production lesson** | the engineering is the **system around the model** (gateway, guardrails, cache, monitor); [08.17](docs/08-Machine-Learning/weeks/08.17-production-ml.md)/[10.13](docs/10-NLP/weeks/10.13-production.md) MLOps, unchanged. |
+
+---
+
+## Prompt Engineering (Module 12)
+
+### Foundations
+
+| Term | Meaning |
+|---|---|
+| **⭐ Core truth** | the model does what your input makes **probable**, not what you meant. |
+| **⭐ Prompt engineering** | shaping the input so the desired output is the most probable continuation. |
+| **Definition** | understand the model + design instructions + control context + define output structure + evaluate results. |
+| **Message roles** | system (durable, high-priority steering — *not a hard boundary*) · user (request + data) · assistant (output; can seed examples). |
+| **⭐ Reliability** | a statistical property measured over a **dataset**, never one output. |
+| **⭐ Prompt anatomy** | role · objective · context · instructions · constraints · examples · output format · success criteria — a weak prompt is usually a **missing component**. |
+| **Escape hatch** | "say 'unknown' if the answer isn't in the data" — top anti-hallucination lever. |
+
+### Patterns & structure
+
+| Term | Meaning |
+|---|---|
+| **Zero/one/few-shot** | no / one / several examples — *tell if describable, show if demonstrable*. |
+| **Role / instruction / contextual prompting** | persona for stance · explicit steps · supplied data (seed of RAG). |
+| **⭐ Separate instructions from data** | the core reliability + security move; delimit untrusted input with XML tags + "treat as data". |
+| **Delimiter collision** | untrusted input closes your delimiter to break out — use fixed fences + sanitization. |
+| **⭐ Few-shot = executable spec** | the model imitates examples (incl. mistakes); levers = selection, quality, diversity, ordering. |
+| **Examples beat instructions** | on conflict the demonstrated pattern usually wins — keep them aligned. |
+
+### Controlling output & flow
+
+| Term | Meaning |
+|---|---|
+| **⭐ Structured output** | JSON validated against a schema — the backbone of production; downstream consumes data, not prose. |
+| **Pattern** | specify schema → low temp → parse+validate → repair-retry → reject (fail closed). |
+| **⚠️ Valid ≠ safe** | a schema-valid string field can carry injection; never eval/exec model output. |
+| **Reasoning workflow** | decompose · plan · self-check · **verify** · critique-revise; return a **concise structured result**, not raw chain-of-thought. |
+| **⭐ Prompt chaining** | one prompt one job; input→extract→transform→validate→format, glued by **validated structured output** at each seam. |
+| **⭐ Template** | prompt-as-code: fixed structure + typed variable slots + **versioned config**; untrusted vars → data slots only. |
+| **Task guard** | per-task: enum (classify) · "null if absent" (extract) · "source only" (summary/QA) · tests (code). |
+
+### Interfaces, evaluation & operations
+
+| Term | Meaning |
+|---|---|
+| **⭐ Context engineering** | *what* goes in the finite window (select/order/compress/prioritize/denoise) vs prompt eng = *how you ask*; **more ≠ better** (lost-in-the-middle). |
+| **⭐ RAG = context engineering** | automated and scaled (retrieve → rerank → construct). |
+| **⭐ Tool/function calling** | model emits structured args for a function you define; **your code** validates + executes; result → context; schema = the tool's prompt. |
+| **⭐ Least privilege (tools)** | minimal, read-only tools; approval for high-impact actions — best defense if hijacked; tool loop + autonomy = **agent** (→ MCP). |
+| **⭐ Prompt evaluation** | over a dataset, 6 dimensions: accuracy, consistency, relevance, completeness, hallucination rate, format correctness — track separately; include unanswerable/adversarial. |
+| **⭐ Prompt testing** | prompts are code: unit + **regression (golden set)** + A/B + versioning; **pin the model version** to catch silent drift. |
+| **Debugging framework** | reproduce → categorize symptom → **inspect the exact prompt** → map to cause → targeted fix → verify; fix the missing component, don't reword. |
+| **⭐ Prompt injection** | instructions & data share one channel → **structural**; direct (user) vs indirect (retrieved/tool content); defense = least privilege + trust separation + output validation. |
+| **Optimization** | move on the quality↔cost↔latency surface via evaluation; **output length** is often the biggest cost/latency lever. |
+| **⭐ Production prompt mgmt** | prompt = deployed artifact: registry · version · env-pin · log · **monitor quality (not uptime)** · rollback (re-pin) · canary A/B. |
+
+---
+
+## Retrieval-Augmented Generation (RAG) (Module 13)
+
+### Why & shape
+
+| Term | Meaning |
+|---|---|
+| **⭐ RAG** | retrieve relevant text → put it in the prompt → generate a grounded answer. |
+| **⭐ Why RAG** | LLM knowledge is **cut off · private-blind · stale · hallucination-prone** — RAG injects fresh/private/citable facts at query time. |
+| **Facts → RAG** | facts/knowledge → RAG · behavior/style → fine-tune · framing → prompt. |
+| **⭐ The RAG law** | **retrieval quality is the ceiling on generation quality**. |
+| **⭐ The pipeline** | ingest → parse → clean → chunk → metadata → embed → index (offline) → retrieve → filter → rerank → context → generate (online) → eval + monitor. |
+
+### Index-time
+
+| Term | Meaning |
+|---|---|
+| **⭐ Parsing law** | parsing quality caps retrieval quality — a parse error is permanent. |
+| **⭐ Chunk** | the atom of RAG — you retrieve chunks, not documents; too big = blurred embedding, too small = severed context. |
+| **Chunking strategies** | fixed < sentence/paragraph < **recursive** < semantic < **structure-aware**; overlap 10–20%. |
+| **⭐ Embedding** | text → dense vector where similarity = closeness; **cosine** (default) == dot product if normalized. |
+| **⭐ Golden rule** | normalize + cosine + same model/metric everywhere; metric mismatch is the #1 bug. |
+| **⭐ ANN** | approximate nearest neighbor — examine ~1%, recover ~99% of neighbors (HNSW/IVF/PQ); recall ↔ speed ↔ memory. |
+
+### Query-time & operations
+
+| Term | Meaning |
+|---|---|
+| **⭐ Dense vs sparse** | dense (embeddings) matches meaning but misses codes; sparse (**BM25**) matches keywords but misses synonyms. |
+| **⭐ Hybrid search** | dense + sparse fused (**RRF**) — semantic recall + exact precision; the most reliable upgrade after chunking. |
+| **⭐ Retrieve vs rerank** | retrieval maximizes recall (top-N); **cross-encoder** reranking maximizes precision (top-k). |
+| **⭐ Lost-in-the-middle** | put best chunks at context edges; more ≠ better. |
+| **⭐ Escape hatch** | "if not in sources, say I don't know" — top anti-hallucination lever; surfaces retrieval failures. |
+| **⭐ Two evaluations** | retrieval (Precision@K, **Recall@K** — fatal if low, MRR, NDCG) + generation (**faithfulness**, answer/context relevance, citation accuracy). |
+| **⭐ Debug by tracing** | trace a query through every stage; first stage where info disappears is the bug. |
+| **⭐ Indirect injection** | malicious instructions in retrieved documents; defense = ACL pre-filter at retrieval + least privilege + data-as-data. |
+| **⭐ Two planes** | offline indexing (async) + online serving (sync); versioned index; monitor quality not just uptime. |
+| **⭐ Semantic caching** | serve a stored answer for an embedding-similar query — biggest latency/cost saver; scope by ACL, invalidate on update. |
