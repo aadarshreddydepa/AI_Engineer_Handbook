@@ -4,6 +4,8 @@
 
 > Production-grade Python: typing, async, packaging, and performance.
 
+![Module 01 · Advanced Python — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

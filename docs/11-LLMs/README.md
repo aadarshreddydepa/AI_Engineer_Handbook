@@ -4,6 +4,8 @@
 
 > How large language models are trained, decode, and behave.
 
+![Module 11 · LLMs — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

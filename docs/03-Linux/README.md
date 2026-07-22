@@ -4,6 +4,8 @@
 
 > The command line and operating-system foundations AI systems run on.
 
+![Module 03 · Linux — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

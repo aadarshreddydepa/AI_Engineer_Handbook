@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 214" width="980" height="214" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" role="img" aria-label="Agent architecture">
+<rect x="0" y="0" width="980" height="214" rx="16" fill="#0f172a"/>
+<rect x="1" y="1" width="978" height="212" rx="15" fill="none" stroke="#1e293b" stroke-width="2"/>
+<text x="24" y="34" fill="#f1f5f9" font-size="20" font-weight="700">Agent architecture</text>
+<text x="24" y="55" fill="#94a3b8" font-size="13">model decides, code controls</text>
+<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/></marker></defs>
+<rect x="24.0" y="98" width="140.3" height="62" rx="10" fill="#4a90d9"/>
+<text x="94.2" y="134.0" fill="#fff" font-size="12.5" font-weight="600" text-anchor="middle">Assemble context</text>
+<rect x="182.3" y="98" width="140.3" height="62" rx="10" fill="#2e8b57"/>
+<text x="252.5" y="134.0" fill="#fff" font-size="12.5" font-weight="600" text-anchor="middle">LLM decides</text>
+<rect x="340.7" y="98" width="140.3" height="62" rx="10" fill="#8e44ad"/>
+<text x="410.8" y="134.0" fill="#fff" font-size="12.5" font-weight="600" text-anchor="middle">Validate</text>
+<rect x="499.0" y="98" width="140.3" height="62" rx="10" fill="#e67e22"/>
+<text x="569.2" y="134.0" fill="#fff" font-size="12.5" font-weight="600" text-anchor="middle">Execute tool</text>
+<rect x="657.3" y="98" width="140.3" height="62" rx="10" fill="#0e7490"/>
+<text x="727.5" y="134.0" fill="#fff" font-size="12.5" font-weight="600" text-anchor="middle">Observe</text>
+<rect x="815.7" y="98" width="140.3" height="62" rx="10" fill="#c0392b"/>
+<text x="885.8" y="134.0" fill="#fff" font-size="12.5" font-weight="600" text-anchor="middle">Budget?</text>
+<line x1="167.3" y1="129.0" x2="179.3" y2="129.0" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#a)"/>
+<line x1="325.7" y1="129.0" x2="337.7" y2="129.0" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#a)"/>
+<line x1="484.0" y1="129.0" x2="496.0" y2="129.0" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#a)"/>
+<line x1="642.3" y1="129.0" x2="654.3" y2="129.0" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#a)"/>
+<line x1="800.7" y1="129.0" x2="812.7" y2="129.0" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#a)"/>
+<path d="M 885.8 160 V 190 H 94.2 V 160" fill="none" stroke="#e67e22" stroke-width="2.2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="490.0" y="206" fill="#e67e22" font-size="12" text-anchor="middle">repeat until goal / done</text>
+</svg>

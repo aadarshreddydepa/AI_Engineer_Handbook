@@ -904,3 +904,194 @@
 | **Cascade** | route easy queries to a cheap small model, escalate hard ones to a frontier model. |
 | **⭐ Semantic caching** | return a cached answer for an embedding-similar query — the biggest cost/latency win in production. |
 | **⭐ The production lesson** | the engineering is the **system around the model** (gateway, guardrails, cache, monitor); [08.17](docs/08-Machine-Learning/weeks/08.17-production-ml.md)/[10.13](docs/10-NLP/weeks/10.13-production.md) MLOps, unchanged. |
+
+
+---
+
+## Prompt Engineering (Module 12)
+
+### Foundations
+
+| Term | Meaning |
+|---|---|
+| **⭐ Core truth** | the model does what your input makes **probable**, not what you meant. |
+| **⭐ Prompt engineering** | shaping the input so the desired output is the most probable continuation. |
+| **Definition** | understand the model + design instructions + control context + define output structure + evaluate results. |
+| **Message roles** | system (durable, high-priority steering — *not a hard boundary*) · user (request + data) · assistant (output; can seed examples). |
+| **⭐ Reliability** | a statistical property measured over a **dataset**, never one output. |
+| **⭐ Prompt anatomy** | role · objective · context · instructions · constraints · examples · output format · success criteria — a weak prompt is usually a **missing component**. |
+| **Escape hatch** | "say 'unknown' if the answer isn't in the data" — top anti-hallucination lever. |
+
+### Patterns & structure
+
+| Term | Meaning |
+|---|---|
+| **Zero/one/few-shot** | no / one / several examples — *tell if describable, show if demonstrable*. |
+| **Role / instruction / contextual prompting** | persona for stance · explicit steps · supplied data (seed of RAG). |
+| **⭐ Separate instructions from data** | the core reliability + security move; delimit untrusted input with XML tags + "treat as data". |
+| **Delimiter collision** | untrusted input closes your delimiter to break out — use fixed fences + sanitization. |
+| **⭐ Few-shot = executable spec** | the model imitates examples (incl. mistakes); levers = selection, quality, diversity, ordering. |
+| **Examples beat instructions** | on conflict the demonstrated pattern usually wins — keep them aligned. |
+
+### Controlling output & flow
+
+| Term | Meaning |
+|---|---|
+| **⭐ Structured output** | JSON validated against a schema — the backbone of production; downstream consumes data, not prose. |
+| **Pattern** | specify schema → low temp → parse+validate → repair-retry → reject (fail closed). |
+| **⚠️ Valid ≠ safe** | a schema-valid string field can carry injection; never eval/exec model output. |
+| **Reasoning workflow** | decompose · plan · self-check · **verify** · critique-revise; return a **concise structured result**, not raw chain-of-thought. |
+| **⭐ Prompt chaining** | one prompt one job; input→extract→transform→validate→format, glued by **validated structured output** at each seam. |
+| **⭐ Template** | prompt-as-code: fixed structure + typed variable slots + **versioned config**; untrusted vars → data slots only. |
+| **Task guard** | per-task: enum (classify) · "null if absent" (extract) · "source only" (summary/QA) · tests (code). |
+
+### Interfaces, evaluation & operations
+
+| Term | Meaning |
+|---|---|
+| **⭐ Context engineering** | *what* goes in the finite window (select/order/compress/prioritize/denoise) vs prompt eng = *how you ask*; **more ≠ better** (lost-in-the-middle). |
+| **⭐ RAG = context engineering** | automated and scaled (retrieve → rerank → construct). |
+| **⭐ Tool/function calling** | model emits structured args for a function you define; **your code** validates + executes; result → context; schema = the tool's prompt. |
+| **⭐ Least privilege (tools)** | minimal, read-only tools; approval for high-impact actions — best defense if hijacked; tool loop + autonomy = **agent** (→ MCP). |
+| **⭐ Prompt evaluation** | over a dataset, 6 dimensions: accuracy, consistency, relevance, completeness, hallucination rate, format correctness — track separately; include unanswerable/adversarial. |
+| **⭐ Prompt testing** | prompts are code: unit + **regression (golden set)** + A/B + versioning; **pin the model version** to catch silent drift. |
+| **Debugging framework** | reproduce → categorize symptom → **inspect the exact prompt** → map to cause → targeted fix → verify; fix the missing component, don't reword. |
+| **⭐ Prompt injection** | instructions & data share one channel → **structural**; direct (user) vs indirect (retrieved/tool content); defense = least privilege + trust separation + output validation. |
+| **Optimization** | move on the quality↔cost↔latency surface via evaluation; **output length** is often the biggest cost/latency lever. |
+| **⭐ Production prompt mgmt** | prompt = deployed artifact: registry · version · env-pin · log · **monitor quality (not uptime)** · rollback (re-pin) · canary A/B. |
+
+
+---
+
+## Retrieval-Augmented Generation (RAG) (Module 13)
+
+### Why & shape
+
+| Term | Meaning |
+|---|---|
+| **⭐ RAG** | retrieve relevant text → put it in the prompt → generate a grounded answer; recall becomes reading comprehension. |
+| **⭐ Why RAG** | LLM knowledge is **cut off · private-blind · stale · hallucination-prone** — RAG injects fresh/private/citable facts at query time. |
+| **Facts → RAG** | facts/knowledge → RAG · behavior/style → fine-tune · framing → prompt. |
+| **⭐ The RAG law** | **retrieval quality is the ceiling on generation quality** — the LLM can only be as right as its context. |
+| **⭐ The pipeline** | ingest → parse → clean → chunk → metadata → embed → index (offline) → retrieve → filter → rerank → context → generate (online) → eval + monitor. |
+| **Offline vs online** | index-time (once per doc, batched) vs query-time (every request, latency-bound); bugs baked offline surface online. |
+
+### Index-time
+
+| Term | Meaning |
+|---|---|
+| **⭐ Parsing law** | parsing quality caps retrieval quality — a parse error (mangled table, bad OCR) is permanent. |
+| **Table extraction** | preserve cell relationships (row-serialize / Markdown), never flow to text. |
+| **OCR** | pixels → text; imperfect → track confidence, flag low-confidence pages. |
+| **Metadata** | source/page/date/**ACL** captured at parse time — powers filtering, access control, citations. |
+| **⭐ Chunk** | the atom of RAG — you retrieve chunks, not documents; boundaries decide what's retrievable. |
+| **Blurred embedding** | a too-large chunk averages many ideas into one vector, matching everything weakly. |
+| **Chunking strategies** | fixed < sentence/paragraph < **recursive** < semantic < **structure-aware**. |
+| **Overlap** | repeat 10–20% of adjacent chunks so boundary-straddling facts survive; first dial to tune. |
+| **⭐ Embedding** | text → dense vector where semantic similarity = geometric closeness. |
+| **⭐ Cosine / dot / L2** | cosine (angle, text default) == dot product if **normalized**; L2 ranks the same when normalized. |
+| **⭐ Golden rule** | normalize + cosine + **same model/metric everywhere**; metric mismatch is the #1 bug. |
+| **Vector database** | stores embeddings + metadata, answers nearest-neighbor queries fast via ANN. |
+| **⭐ ANN** | approximate nearest neighbor — examine ~1% of vectors, recover ~99% of true neighbors. |
+| **HNSW / IVF / PQ** | graph walk / cluster-probe / lossy compression — the three ANN families. |
+| **⭐ ANN trade-off** | recall ↔ speed ↔ memory; tune to a measured recall target vs brute-force ground truth. |
+
+### Query-time
+
+| Term | Meaning |
+|---|---|
+| **⭐ Dense vs sparse** | dense (embeddings) matches meaning but misses exact codes; sparse (**BM25**) matches keywords but misses synonyms. |
+| **BM25** | refined TF-IDF: IDF (rare=important) · TF saturation (k₁) · length norm (b). |
+| **⭐ Hybrid search** | run dense + sparse and **fuse** (RRF) — semantic recall + exact precision; the most reliable upgrade after chunking. |
+| **RRF** | Reciprocal Rank Fusion — combine retrievers by rank `1/(k+rank)`, no score normalization needed. |
+| **Metadata filtering** | scope by date/type/**ACL**; enforce access control at retrieval (pre-filter). |
+| **Query expansion / multi-query / HyDE** | fix vocabulary mismatch on the query side (cost: latency + noise). |
+| **⭐ Retrieve vs rerank** | retrieval maximizes recall (generous top-N); reranking maximizes precision (top-k). |
+| **Bi- vs cross-encoder** | encode query & chunk separately (fast) vs together with attention (precise, 1 pass/candidate). |
+| **⭐ Reranker** | cross-encoder that re-scores retrieved candidates; often the biggest quality jump. |
+| **⭐ Lost-in-the-middle** | LLMs use context start & end, ignore the middle (U-curve) → put best chunks at edges, keep k small. |
+| **More ≠ better context** | extra chunks add distractors and dilute attention → lower accuracy. |
+| **Dedup** | mandatory — overlap and multi-query create duplicate passages. |
+| **⭐ Escape hatch** | "if the answer isn't in the sources, say I don't know" — the top anti-hallucination lever; surfaces retrieval failures. |
+| **Grounding** | "answer ONLY from the sources; no prior knowledge." |
+| **Citation** | attribute each claim to [Source N]; **verify** — a cited source isn't a verified source. |
+| **Sources = data** | treat retrieved text as data, never instructions (injection defense). |
+
+### Advanced, evaluation & operations
+
+| Term | Meaning |
+|---|---|
+| **Parent-child (small-to-big)** | match small chunks (precise), return large parents (context). |
+| **Multi-hop / graph / agentic / corrective / self-reflective RAG** | advanced patterns, each fixing a specific naive-RAG failure; add only for a measured failure. |
+| **⭐ Two evaluations** | retrieval (Precision@K, **Recall@K**, MRR, NDCG) and generation (**faithfulness**, answer/context relevance, citation accuracy). |
+| **⭐ Recall@K** | fraction of relevant chunks in top-K — the **fatal** RAG retrieval metric (a miss is unrecoverable). |
+| **⭐ Faithfulness** | every answer claim is supported by the context — the anti-hallucination metric. |
+| **RAG triad** | context relevance (retrieval) + faithfulness (grounding) + answer relevance (helpfulness). |
+| **Unanswerable tests** | include out-of-corpus questions to measure correct declines. |
+| **⭐ Debug by tracing** | trace a query through every stage; the first stage where info disappears is the bug (symptom is last, cause upstream). |
+| **⭐ Indirect prompt injection** | malicious instructions in retrieved documents the LLM may obey — structural; best defense is **least privilege**. |
+| **Access control** | ACL/tenant **pre-filter at retrieval**, never after generation; isolate tenants by namespace/DB. |
+| **Document poisoning** | false/malicious corpus content served authoritatively → provenance, write controls, citations. |
+| **⭐ Two planes** | offline indexing (async, batched) + online serving (sync, latency-bound); share only state. |
+| **Versioned index** | re-embed + blue/green swap on model change; roll back with no downtime. |
+| **⭐ Monitor quality** | not just uptime — freshness, refusal rate, faithfulness; a healthy system can serve wrong answers. |
+| **⭐ Latency goes to generation** | LLM call dominates (80–95%), then rerank; retrieval/embed are small. |
+| **⭐ Semantic caching** | serve a stored answer for an embedding-similar past query — biggest latency/cost saver; scope by ACL, invalidate on update. |
+| **Right-size the model** | retrieval supplies the knowledge → a smaller/cheaper LLM often suffices. |
+| **Frameworks (LangChain/LlamaIndex/Haystack)** | pre-wire the pipeline; help for prototypes/connectors, **hide the quality knobs** (chunking, metric, retrieval, prompt). |
+
+---
+
+## AI Agents & MCP (Module 14)
+
+### The agent & its loop
+
+| Term | Meaning |
+|---|---|
+| **⭐ Agent** | an LLM running in a **loop** with tools, memory, and a goal — perceive → reason → plan → act → observe → reflect → repeat. |
+| **⭐ Core truth** | an agent is a **loop, not a prompt**: the model decides, the **code controls** (loop, budget, validation, memory, permissions). |
+| **vs workflow** | in a workflow the *developer* hardcodes steps; in an agent the *LLM* decides steps at runtime. |
+| **vs RAG** | RAG is one fixed retrieve→generate step; an agent chooses tools dynamically (RAG can be one tool). |
+| **ReAct** | reason → act (tool call) → observe → repeat — the default architecture. |
+| **Plan-and-execute** | plan all steps up front, then execute (re-plan as needed). |
+| **Structured decision** | the LLM returns `{thought, tool, args}` or `{finish, answer}`, never free text. |
+
+### Planning, tools, memory, reflection
+
+| Term | Meaning |
+|---|---|
+| **Planning** | decompose **goal → sub-goals → tasks → actions (tool calls) → results**, stopping at the tool level. |
+| **Sequential/dynamic/hierarchical** | plan up front (brittle) · plan each step (adaptive) · layered; trade-off = **commitment vs adaptivity**; default plan-and-execute with **re-planning**. |
+| **⭐ Tools** | the agent's capabilities — it can only *do* what a tool allows; pipeline = select → **validate** → execute (sandbox/timeout) → structured result. |
+| **⭐ Failures → observations** | tool errors become recoverable observations, never crashes — this is how agents recover. |
+| **Retries** | bounded backoff for *transient* failures only; not permanent (bad args/403). |
+| **⭐ Memory** | external system (LLM is stateless); window = **RAM**, stores = **disk**; types: working · long-term · **semantic** (facts) · **episodic** (past runs) · vector · conversation. |
+| **Memory lifecycle** | write → retrieve → **summarize** → prune → persist; summarize to survive long tasks. |
+| **Memory poisoning** | attacker writes malicious content to long-term memory to steer future runs — treat recall as untrusted; scope writes. |
+| **Reflection** | self-evaluate → detect error → correct → **verify** (grounded > self-critique); bound it; use before irreversible actions. |
+
+### Loops, multi-agent, MCP
+
+| Term | Meaning |
+|---|---|
+| **Loop types** | fixed (N steps) · **adaptive** (until goal/budget, default) · event-driven (on events, idle-cheap). |
+| **⭐ Termination** | goal · step budget · cost budget · **no-progress** · **oscillation** — enforced in **code**, never by the model; degrade gracefully. |
+| **Multi-agent** | specialized agents (coordinator/planner/worker/researcher/**critic**/executor); patterns: hierarchical/sequential/parallel/debate. |
+| **When multi-agent** | only for a concrete reason (too many tools / context overload / parallelism / review / expertise); default single-agent. |
+| **⭐ MCP** | Model Context Protocol — open standard connecting apps to tools/data; **"USB-C for AI"**; turns M×N integrations into M+N. |
+| **MCP host/client/server** | host = the AI app (LLM + clients); client = 1:1 link inside the host; server = exposes capabilities wrapping a service/data. |
+| **MCP primitives** | **resources** (app-controlled, read-only data by URI) · **tools** (model-controlled actions) · **prompts** (user-controlled templates). |
+| **MCP transport/lifecycle** | JSON-RPC over **stdio** (local) / **HTTP+SSE** (remote); initialize (capability negotiation) → operate → shutdown. **MCP = transport, not safety.** |
+
+### Context, comms, humans, safety, eval, production
+
+| Term | Meaning |
+|---|---|
+| **Agent context** | re-chosen **every step** and grows; use **dynamic assembly** + **rolling summarization** + externalized state; **re-state the goal** (anti-drift). |
+| **Agent communication** | structured, schema-validated messages (an API, not a chat); **aggregation ≠ concatenation**; messages are untrusted. |
+| **Human-in-the-loop** | pause for a human at high-stakes/irreversible/low-confidence moments (approval/checkpoint/override/escalation/feedback); calibrate by impact — the **last line of defense vs hijack**. |
+| **⭐ Least privilege** | the load-bearing agent-safety control — fewest/narrowest tools, read-only default; works regardless of *how* the agent is compromised. |
+| **⭐ Assume breach** | design so a fully hijacked agent has minimal blast radius; layer sandboxing, secret hygiene (never in context), rate limits, audit logs. |
+| **⭐ Agent evaluation** | top-line = **task success rate**; + component (tool/planning accuracy), efficiency (steps/latency/cost), reliability/safety; evaluate **outcome + trajectory**; sandboxed, end-state checks, adversarial cases. |
+| **⭐ Production agent** | service-oriented: gateway → orchestrator (loop+budgets+**durable/resumable state**) → planner/memory/retriever → **tool manager** (security choke point) → MCP → observability; **trace the full trajectory**, monitor success/cost not uptime. |
+| **Frameworks** | LangGraph (graphs/durable state) · CrewAI/AutoGen (multi-agent) · OpenAI Agents SDK/PydanticAI (lightweight/typed) · Semantic Kernel (enterprise); package the primitives but **hide the guardrails** — build by hand first, configure budgets/permissions explicitly. |

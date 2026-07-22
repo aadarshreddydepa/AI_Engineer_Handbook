@@ -4,6 +4,8 @@
 
 > The math that powers ML — built from intuition, not memorization.
 
+![Module 06 · Mathematics — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

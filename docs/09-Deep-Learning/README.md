@@ -4,6 +4,8 @@
 
 > Neural networks from the ground up with PyTorch.
 
+![Module 09 · Deep Learning — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose
