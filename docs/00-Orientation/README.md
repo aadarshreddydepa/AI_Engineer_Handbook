@@ -4,6 +4,8 @@
 
 > How to use this handbook, the AI-engineer mindset, and setting up a reproducible environment.
 
+![Module 00 · Orientation — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

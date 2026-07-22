@@ -4,6 +4,8 @@
 
 > Turning raw data into insight with NumPy, pandas, and visualization.
 
+![Module 07 · Data Analysis — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

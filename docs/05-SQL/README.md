@@ -4,6 +4,8 @@
 
 > Relational data modeling and querying for AI applications.
 
+![Module 05 · SQL — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

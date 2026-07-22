@@ -4,6 +4,8 @@
 
 > Version control and collaboration workflows for real teams.
 
+![Module 04 · Git — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

@@ -4,6 +4,8 @@
 
 > Classical ML from first principles: models, evaluation, and error analysis.
 
+![Module 08 · Machine Learning — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

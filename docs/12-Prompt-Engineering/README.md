@@ -4,6 +4,8 @@
 
 > Prompt engineering as a technical discipline — designing reliable interactions between humans, LLMs, tools, and systems.
 
+![Module 12 · Prompt Engineering — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

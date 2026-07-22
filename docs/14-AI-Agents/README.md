@@ -4,6 +4,8 @@
 
 > How modern AI agents work from first principles — architecture, planning, memory, tools, MCP, multi-agent systems, and production — before any framework.
 
+![Module 14 · AI Agents & Model Context Protocol (MCP) — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

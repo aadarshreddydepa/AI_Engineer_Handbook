@@ -4,6 +4,8 @@
 
 > The core CS every engineer needs: data structures, algorithms, and complexity.
 
+![Module 02 · Computer Science — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

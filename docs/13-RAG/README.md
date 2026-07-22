@@ -4,6 +4,8 @@
 
 > Grounding LLMs with retrieval-augmented generation — from first principles to production.
 
+![Module 13 · RAG — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose

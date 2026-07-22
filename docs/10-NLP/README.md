@@ -4,6 +4,8 @@
 
 > Language modeling and the Transformer architecture.
 
+![Module 10 · NLP — overview diagram](diagrams/hero.svg)
+
 ---
 
 ## Purpose
