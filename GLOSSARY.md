@@ -1200,3 +1200,53 @@
 | **Cloud MLOps** | SageMaker/Vertex/Azure ML package the same lifecycle; **managed vs self-hosted** = speed+integration vs lock-in+price → keep a **portable core**. |
 | **⭐ Shared architecture** | ML/LLM/agent systems share a skeleton: **gateway → core → observability**, on a registry + CI/CD backbone. |
 | **Capstone loop** | ML: data→train→registry→serve→observe→**drift→retrain**; LLM: prompt/RAG/agent→**eval-gated CI/CD**→serve→observe cost→**regression→rollback**. |
+
+## Cloud for AI Engineers (Module 17)
+
+### Foundations, compute & GPU
+
+| Term | Meaning |
+|---|---|
+| **⭐ Concepts transfer** | every cloud implements the same primitives under different names — learn the concept once, the vendor name is a lookup. |
+| **Cloud computing** | rent computing on demand, pay per use; a utility model enabled by **virtualization**. |
+| **Elasticity vs. scalability** | auto/reversible scaling with demand vs. the capability to grow by adding resources. |
+| **Availability vs. fault tolerance** | measured uptime (outcome) vs. the redundant design that produces it. |
+| **⭐ IaaS/PaaS/SaaS/serverless** | how much of the stack *you* manage (most → least); climb to the highest rung meeting control/cost/latency/**GPU** needs. |
+| **Region ⊃ AZ ⊃ datacenter** | nested independent failure domains; AZs fail independently, close enough to replicate. |
+| **⭐ HA pattern** | redundant replicas across ≥2 AZs behind a load balancer that health-checks and reroutes. |
+| **RTO / RPO** | max downtime / max data loss → drives disaster-recovery strategy and cost. |
+| **CPU vs GPU vs TPU** | few fast cores (serial logic) vs. thousands of cores (parallel matmul) vs. matmul ASIC. |
+| **⭐ VRAM** | the binding GPU constraint — model (+ activations, + grads/optimizer for training) must *fit*. Bytes/param: fp32=4, fp16=2, int8=1, int4=0.5; full-FT ≈16 B/param. |
+| **GPU scaling ladder** | single → multi-GPU (NVLink) → distributed (network-bound) → cluster. |
+
+### Network, storage, data, containers
+
+| Term | Meaning |
+|---|---|
+| **⭐ VPC / public-private subnet** | your isolated network; public subnet = load balancer only, private = app/model/DB/vector (no inbound internet). |
+| **Security group** | instance firewall; default-deny, allow per port + source (least privilege for traffic). |
+| **Request path** | User → DNS → Load Balancer → App → Model → Database/vector DB. |
+| **Block / file / object** | raw disk (one VM) / shared filesystem / **key→blob (the AI workhorse)** — datasets, checkpoints, docs. |
+| **⭐ Vector DB** | stores embeddings for **similarity search** (RAG, agent memory) + metadata filter for tenant isolation. |
+| **Access pattern** | cache (µs) → DB (structured) → vector DB (retrieval). |
+| **⭐ Container** | app + exact deps in a portable OS-virtualized box; kills "works on my machine". Flow: Source→Dockerfile→Image→Registry→Container→Cloud; weights & secrets **not** baked in. |
+| **⭐ Kubernetes** | reconciliation loop over declared state; **Deployment** (always-on serving) vs **Job** (run-to-completion); GPU via `nvidia.com/gpu` request. |
+| **Serverless** | functions per-event, scale-to-zero — glue, **not** GPU/large models/long training. |
+
+### Architect, secure, cost, scale, operate
+
+| Term | Meaning |
+|---|---|
+| **⭐ Shared skeleton** | gateway → app → **AI core** (model/RAG/agent) → data → observability+security; the three architectures differ only in the core + dominant store. |
+| **AI service categories** | model APIs · hosting · training infra · GPU compute · vector search · data platforms; think categories, not products. |
+| **⭐ Identity chain / least privilege** | identity → authN → authZ (IAM) → resource; grant the minimum → shrink the blast radius. Secrets vaulted; encryption at rest + in transit. |
+| **⭐ Cost buckets** | compute · **GPU** · storage · network(egress) · **API(tokens)**; GPU + API dominate AI; #1 leak = **idle GPUs**. |
+| **Cost levers** | right-size · **scale-to-zero** · spot(train) · reserved(steady) · cache · batch. |
+| **Autoscaling** | horizontal (default, +LB) vs vertical; GPU needs a **warm minimum** (slow scale-up). |
+| **⭐ Message queue** | decouple producer/worker → burst absorption · fault tolerance · independent scaling · async; **queue depth** = autoscaling signal. |
+| **Distributed training** | data/model parallelism across GPUs — **network-bound** by gradient sync. |
+| **Deploy pipeline** | Code→Git→CI/CD(test+evals)→build→registry→staging→prod→monitor; **build once, deploy many**. |
+| **⭐ IaC (Terraform)** | infra as versioned code; plan/apply/destroy; **state** is sensitive (remote, encrypted, locked, never in git); per-env variables → dev/staging/prod parity. |
+| **Observability** | logs · metrics · traces · alerts + AI signals (**tokens, model latency, throughput, retrieval quality, tool calls**) — AI fails quietly. |
+| **Reliability** | HA + fault tolerance (timeout/retry/circuit-breaker) + DR (backups/failover); **graceful degradation** = cached/smaller-model/retrieval-only. |
+| **⭐ Multi-cloud** | resilience/GPU/residency ↔ complexity/egress/ops; defend lock-in with a **portable core** (K8s · Terraform · Docker · MLflow · open formats). |
