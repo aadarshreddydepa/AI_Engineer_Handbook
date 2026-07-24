@@ -1095,3 +1095,51 @@
 | **⭐ Agent evaluation** | top-line = **task success rate**; + component (tool/planning accuracy), efficiency (steps/latency/cost), reliability/safety; evaluate **outcome + trajectory**; sandboxed, end-state checks, adversarial cases. |
 | **⭐ Production agent** | service-oriented: gateway → orchestrator (loop+budgets+**durable/resumable state**) → planner/memory/retriever → **tool manager** (security choke point) → MCP → observability; **trace the full trajectory**, monitor success/cost not uptime. |
 | **Frameworks** | LangGraph (graphs/durable state) · CrewAI/AutoGen (multi-agent) · OpenAI Agents SDK/PydanticAI (lightweight/typed) · Semantic Kernel (enterprise); package the primitives but **hide the guardrails** — build by hand first, configure budgets/permissions explicitly. |
+
+---
+
+## Fine-Tuning & Alignment (Module 15)
+
+### Decide & data
+
+| Term | Meaning |
+|---|---|
+| **⭐ What FT changes** | **behavior / style / format / skill — not knowledge** (facts → RAG; framing → prompt; behavior → fine-tune). |
+| **⭐ FT is a data problem** | the model mirrors its data — **quality > quantity**; ~80% of the work is data engineering. |
+| **⭐ Memory is the constraint** | LoRA/QLoRA exist because full FT's gradient+optimizer memory is huge. |
+| **Base / instruct / chat** | pretrained completer / instruction-follower (after SFT) / multi-turn aligned model with a **chat template**. |
+| **Adaptation ladder** | prompt < RAG < **LoRA/QLoRA** < full FT < continued pretraining — climb only as far as needed. |
+| **Continued pretraining** | next-token on unlabeled *domain* text (no instructions) to teach domain language before SFT. |
+| **Data pipeline** | collect → clean → **dedup (exact+near)** → filter → **PII-redact** → validate → **split (no leakage)**. |
+| **⭐ Data leakage** | a test example (or paraphrase/same-source) also in training → inflated eval; dedup before splitting, group-split, test set sacred. |
+| **Instruction formats** | alpaca `{instruction,input,output}` (single-turn) · `messages` (chat/multi-turn); render with `apply_chat_template`. |
+
+### Train
+
+| Term | Meaning |
+|---|---|
+| **⭐ SFT** | same next-token cross-entropy as pretraining, on instruction→response data. |
+| **⭐ Loss masking** | compute loss on **response tokens only** (prompt labels = -100) → learn to answer, not parrot; keep **EOS**. |
+| **Full fine-tuning** | update all params; **≈16 bytes/param** (fp16 weight + grad + fp32 master + Adam m/v) + activations → 7B ≈ 112 GB. |
+| **⭐ LoRA** | freeze `W`, train low-rank `ΔW = BA` (~0.1–1% params); forward `Wx + (α/r)BAx`; `B=0` init; memory win = frozen base has no grad/optimizer; swappable adapters. |
+| **Rank / alpha / target modules** | update capacity / scale (α/r ≈ effective LR) / which layers get adapters (attention q/k/v/o, +MLP). |
+| **⭐ QLoRA** | LoRA on a **4-bit NF4 + double-quant** frozen base + **paged optimizer** → 65B on one 48 GB GPU; adapters full precision. |
+| **NF4 / double quant / paged optimizer** | 4-bit datatype optimal for normal weights / quantize the quant constants / page optimizer states GPU↔CPU. |
+| **Stack** | Transformers · Datasets · **PEFT** (LoRA) · **TRL** (SFT/DPO trainers) · **bitsandbytes** (4-bit); QLoRA = all four. |
+| **Dangerous hyperparameters** | **LR** (too high → forget/NaN) · **epochs** (too many → overfit); effective batch = batch × accum × devices. |
+| **Fit-it order** | mixed precision → LoRA/QLoRA → gradient checkpointing → accumulation → flash attention → distributed (last). |
+| **⭐ Catastrophic forgetting** | FT overwrites general capability; **detect on a retention set (general + safety)** base vs tuned; **LoRA reduces it** (frozen base). |
+
+### Align, evaluate, ship
+
+| Term | Meaning |
+|---|---|
+| **⭐ RLHF** | SFT → human preference pairs → **reward model** (Bradley–Terry) → **PPO** (`E[r] − β·KL(π‖SFT)`); KL prevents **reward hacking**; heavy (4 models). |
+| **⭐ DPO** | preference alignment with **no reward model, no RL**: `−log σ(β·[(logπ/π_ref)_chosen − (logπ/π_ref)_rejected])`, response-only log-probs, **frozen reference** = anchor. Recipe: **SFT → DPO**. |
+| **Preference pair** | (prompt, **chosen**, **rejected**) — the data RLHF and DPO share. |
+| **Other alignment** | Constitutional AI / RLAIF (AI feedback) · **ORPO** (align in SFT, no reference) · **KTO** (unpaired 👍/👎) · reward-model reranking (no training). |
+| **⭐ Evaluation axes** | task (F1) · generation (relevance/fluency/IF) · **safety** (toxicity/bias/**leakage**); methods = reference-based/free · **LLM-judge (calibrate)** · human — **triangulate**. |
+| **⭐ Base vs fine-tuned** | absolute score is meaningless — compare **delta** on identical **paired** eval; ship only **significant + net-positive + no protected regression** (safety, capability, leakage). |
+| **Debugging** | most bugs are **data/format** (template/masking); first 3 checks = render input · masking+EOS · read 50 examples; NaN → ↓LR/clip/bf16. |
+| **⭐ Security/privacy** | weights **fuse the data** → memorization/leakage (redact+**dedup**+low epochs), un-deletable (prefer RAG), poisoning (provenance), extraction/membership (rate-limit/DP). |
+| **⭐ Production pipeline** | version data → validate → train (tracked) → eval → **safety gate** → registry (lineage) → deploy (canary) → monitor → retrain; two invariants = **full lineage + safe change (gate + rollback)**. |

@@ -1,10 +1,25 @@
 ## [Unreleased]
 
 ### Planned
-- Module 15 · Fine-Tuning — lesson content
+- Module 16 · MLOps — lesson content
 - Weekly lessons authored module by module
 
 ---
+
+## [0.21.0] — 2026-07-22
+
+### Added
+- **Module 15 · Fine-Tuning & Alignment — complete.** (Authored in `docs/15-Fine-Tuning/`. Teaches adapting foundation models as a **full lifecycle** — base model → task → data → strategy → SFT → LoRA/QLoRA → alignment → evaluation → safety → deployment → monitoring — *not* "dataset → trainer → model." The spine, proven from every angle: **fine-tuning changes behavior, not knowledge; it's a data problem; memory is the constraint; and a fine-tune isn't done until you've proven it's better (base vs tuned) and not worse (safety/forgetting).**)
+  - 22 lessons (`docs/15-Fine-Tuning/weeks/15.1`–`15.22`): why fine-tune (⭐ behavior not knowledge; the prompt→RAG→fine-tune decision tree), base models (base/instruct/chat; chat templates), **strategy selection** (⭐ the prompt/RAG/LoRA/QLoRA/full/continued-pretrain ladder), **dataset preparation** (clean/dedup/PII/**no-leakage** splits; *quality > quantity*), instruction dataset design (alpaca vs messages; `apply_chat_template`), **SFT** (⭐ next-token + **loss masking**, implemented in PyTorch), full fine-tuning (**~16 bytes/param** memory wall), **LoRA** (⭐ `W' = W + BA`, implemented; rank/alpha/dropout/targets), **QLoRA** (⭐ 4-bit **NF4** + double-quant + paged optimizer, implemented), the practical stack (Transformers/Datasets/PEFT/TRL/bitsandbytes), hyperparameters, training optimization (mixed precision/checkpointing/accumulation/flash-attn/distributed), **catastrophic forgetting** (detect on a retention set; LoRA reduces it), **RLHF** (⭐ preference → reward model → PPO; KL prevents reward hacking), **DPO** (⭐ no reward model/no RL; the loss implemented in PyTorch), other alignment (Constitutional AI/RLAIF/ORPO/KTO), **evaluation** (⭐ task/generation/**safety** axes; LLM-judge limits), base-vs-fine-tuned (paired, significance, protected regressions), debugging (symptom→cause→fix), **security & privacy** (memorization/leakage/poisoning/extraction — strictly defensive), production pipeline (versioning/registry/rollback/lineage), and a projects + summary lesson.
+  - Companion artifacts: a tiered [exercises](docs/15-Fine-Tuning/exercises/README.md) set (decide → data → train → align → evaluate → ship → capstone, with ⭐ **E6 SFT from scratch, E8 LoRA layer, E9 QLoRA on one GPU, E15 DPO objective, E16 eval framework, E19 production pipeline**, plus conceptual/mathematical/GPU-estimation/debugging exercises), a 44-question [quiz](docs/15-Fine-Tuning/quizzes/quiz-01.md) with model [answers](docs/15-Fine-Tuning/quizzes/answers-01.md), a ~95-card [flashcard deck](docs/15-Fine-Tuning/flashcards/deck.md), and a [master cheat sheet](docs/15-Fine-Tuning/cheat-sheets/finetuning-cheatsheet.md).
+  - Eight mini-projects (SFT classifier → domain assistant → LoRA → QLoRA → preference dataset → DPO → **base-vs-SFT-vs-LoRA-vs-DPO evaluation** → flagship **production fine-tuning pipeline**), each with requirements, folder structure, architecture, dataset design, training strategy, evaluation, testing, security, monitoring, and future improvements.
+  - Module [lesson index](docs/15-Fine-Tuning/weeks/README.md) (five-phase graph: decide → data → train → align → evaluate & ship). Glossary: added a "Fine-Tuning & Alignment (Module 15)" section (~45 terms). Visuals: a module hero SVG plus lesson hero SVGs for the ⭐ lessons (15.1/15.3/15.6/15.8/15.9/15.14/15.15/15.17).
+
+### Notes
+- **The module's spine, proven: fine-tuning changes behavior, not knowledge.** The reader **implements SFT (with loss masking), a LoRA layer (`W' = W + BA`), and the DPO loss by hand** before relying on the frameworks; every lesson carries **GPU-memory and cost** sections, and the arithmetic (full FT ≈ 16 bytes/param → 7B ≈ 112 GB; QLoRA → 65B on one GPU) is why LoRA/QLoRA are the defaults.
+- **Alignment is taught as behavior too:** RLHF (preferences → reward model → PPO, with the KL penalty as the anti-reward-hacking leash) motivates **DPO** (same data, no reward model, no RL — the practical **SFT → DPO** recipe), with ORPO/KTO/RLAIF as the simpler/cheaper frontier.
+- The **security lesson (15.20) is strictly defensive** — memorization/leakage, un-deletable data (prefer RAG), poisoning, and extraction/membership — with the *memorization triad* (redact + dedup + low epochs). Evaluation (15.17–15.18) treats **safety as a first-class, gating axis** and insists on **base-vs-tuned, paired, significance-tested** comparison shipping only net-positive, regression-free changes.
+- This module **cashes in Modules 09 and 11**: the training loop, AdamW, and mixed precision from Module 09; fine-tuning/PEFT/alignment theory from [11.11](docs/11-LLMs/weeks/11.11-fine-tuning.md)–[11.13](docs/11-LLMs/weeks/11.13-alignment.md) — made concrete, implemented, and production-ready.
 
 ## [0.19.0] — 2026-07-21
 
