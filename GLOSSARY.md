@@ -1143,3 +1143,60 @@
 | **Debugging** | most bugs are **data/format** (template/masking); first 3 checks = render input · masking+EOS · read 50 examples; NaN → ↓LR/clip/bf16. |
 | **⭐ Security/privacy** | weights **fuse the data** → memorization/leakage (redact+**dedup**+low epochs), un-deletable (prefer RAG), poisoning (provenance), extraction/membership (rate-limit/DP). |
 | **⭐ Production pipeline** | version data → validate → train (tracked) → eval → **safety gate** → registry (lineage) → deploy (canary) → monitor → retrain; two invariants = **full lineage + safe change (gate + rollback)**. |
+
+## MLOps & LLMOps (Module 16)
+
+### Foundations
+
+| Term | Meaning |
+|---|---|
+| **⭐ Fails quietly** | AI can return `200 OK` while being **wrong** (stale RAG, confident hallucination, broken plan) — no exception; only evals/observability/drift detection catch it. |
+| **⭐ Closed loop** | production AI is not train→deploy but a loop: reproduce → version → track → gate → serve → observe → detect drift → evaluate → retrain / roll back. |
+| **Reproducibility** | pin **code + data + model + env + seed** — all inputs, not just code; same inputs → same system. |
+| **Data versioning** | version datasets by hash/snapshot (DVC/LakeFS); diff **distributions**, not just lines. |
+| **Experiment tracking** | log params/metrics/artifacts/lineage per run (MLflow/W&B) → defensible "best model". |
+| **⭐ Model registry** | versioned source of truth for models with lifecycle stages; **gated promotion** (eval+approval) and **instant rollback** to last-good. |
+
+### Build & ship
+
+| Term | Meaning |
+|---|---|
+| **ML pipeline** | orchestrated DAG with retries/caching/lineage (Airflow/Prefect/Dagster/Kubeflow); a failed stage resumes. |
+| **⭐ CI/CD for AI** | test **data, models, prompts, RAG/agents** — not just code; green = "quality didn't regress". |
+| **Eval gate** | automated quality check that **blocks promotion** on regression. |
+| **Serving modes** | **batch** (throughput) · **online** (low-latency request/response) · **async** (queue for long/spiky work). |
+| **Serving stacks** | classic: FastAPI/BentoML/TorchServe · LLM: **vLLM/TGI** (KV cache, continuous batching, streaming). |
+| **Deployment strategies** | blue-green (instant switch) · **canary** (small % first) · rolling · **shadow** (mirror traffic, no user impact). |
+
+### LLMOps
+
+| Term | Meaning |
+|---|---|
+| **⭐ LLMOps** | MLOps + versioning **prompts/RAG/agents**, **pinning the model version**, quality (not accuracy) evals, token/cost/quality monitoring. |
+| **Pin model version** | a silent provider update changes outputs — evals/reproducibility break with no code change. |
+| **⭐ LLM evaluation** | axes: task success · generation quality · **safety** · cost/latency — **not accuracy alone**; **LLM-as-judge** calibrated vs humans, fixed judge version. |
+| **Optimization** | quantization (fewer bits/weight) · distillation (small mimics big) · pruning (drop low-value weights). |
+| **⭐ Speed levers** | **KV cache** (per-request) · **continuous batching** (throughput) · **speculative decoding** (latency). |
+
+### Operate
+
+| Term | Meaning |
+|---|---|
+| **⭐ Observability** | logs · metrics · **traces** (OpenTelemetry/Langfuse/Phoenix) + LLM: tokens/cost/latency/quality per call. |
+| **Drift** | **data** (input shifts) · **concept** (input→output relationship shifts) · **model** (perf decays). |
+| **KS / PSI** | statistical tests for how far a distribution moved from reference; threshold → **detect → evaluate → retrain** (drift ≠ degradation). |
+| **Reliability** | timeout · retry+backoff · **circuit breaker** · rate limit/backpressure · **graceful degradation** (fall back, don't cascade). |
+| **⭐ Cost attribution** | measure cost per **request/user/model/workflow**; a blended bill hides the runaway driver; cut via routing/caching/trimming/batching. |
+| **⭐ AI security (two layers)** | **infra** (IAM/network/secrets) + **AI** (prompt injection, exfiltration, tool misuse); least privilege + defense-in-depth. |
+
+### Infrastructure & architecture
+
+| Term | Meaning |
+|---|---|
+| **GPU VRAM** | model bytes (params × bytes/precision) + KV cache (batch×seq) + activations; full-FT ≈ **16 bytes/param**. |
+| **Fit ladder** | precision ↓ → batch/seq ↓ → tune KV cache → offload/shard → bigger/more GPUs. |
+| **Kubernetes** | pod · deployment · service · job; GPU via `nvidia.com/gpu`; autoscale + warm min replica. |
+| **⭐ IaC** | **Docker** (runtime) · **Terraform** (cloud resources) · **K8s** (orchestrate) · **Helm** (parameterize); reproduce/review/rollback infra; **no secrets in files**. |
+| **Cloud MLOps** | SageMaker/Vertex/Azure ML package the same lifecycle; **managed vs self-hosted** = speed+integration vs lock-in+price → keep a **portable core**. |
+| **⭐ Shared architecture** | ML/LLM/agent systems share a skeleton: **gateway → core → observability**, on a registry + CI/CD backbone. |
+| **Capstone loop** | ML: data→train→registry→serve→observe→**drift→retrain**; LLM: prompt/RAG/agent→**eval-gated CI/CD**→serve→observe cost→**regression→rollback**. |
